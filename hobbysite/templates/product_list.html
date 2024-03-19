@@ -3,9 +3,15 @@
 {% load static %}
 
 {% block title %} 
-Product List
+List of Merchandise
 {% endblock title %}
 
 {% block content %}
+<h2> Merch List</h2>
+<ul>
+    {% for product in object_list %}
+    <li><a href="{{ product.get_absolute_urll }}">{{product.name}}</a></li>
+    {% endfor %}
+</ul>
 
 {% endblock content %}

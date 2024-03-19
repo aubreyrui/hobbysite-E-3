@@ -3,9 +3,15 @@
 {% load static %}
 
 {% block title %} 
-{{product.title}}
+{{product.name}}
 {% endblock title %}
 
 {% block content %}
+<h2>{{ product.name }}</h2>
+<ul>
+    <li><h3>Price: {{ product.price }}</h3></li>
+    <li><h3>Product type: {{ product.producttype }}</h3></li>
+    <li><p>Description: {{ product.description }}</p></li>
+</ul>
 
 {% endblock content %}

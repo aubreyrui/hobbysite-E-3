@@ -6,4 +6,4 @@ urlpatterns = [
     path('merchstore/item/<int:pk>', ProductDetailView.as_view(), name="product_detail"),
 ]
 
-app_name = "merchstore"
+app_name = 'merchstore'
