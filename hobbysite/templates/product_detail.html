@@ -7,11 +7,14 @@
 {% endblock title %}
 
 {% block content %}
+
 <h2>{{ product.name }}</h2>
 <ul>
     <li><h3>Price: {{ product.price }}</h3></li>
     <li><h3>Product type: {{ product.producttype }}</h3></li>
     <li><p>Description: {{ product.description }}</p></li>
 </ul>
+<br>
+<p><a href="/merchstore/items">Return to List</a></p>
 
 {% endblock content %}

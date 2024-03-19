@@ -6,15 +6,22 @@ from .models import Product, ProductType
 class ProductInLine(admin.TabularInline):
     model = Product
 
+class ProductTypeInLine(admin.TabularInline):
+    model = ProductType
+
 class ProductTypeAdmin(admin.ModelAdmin):
     model = ProductType
     inlines = [ProductInLine,]
+
+    list_display = ['name',]
+    ordering = ['-name',]
 
 class ProductAdmin(admin.ModelAdmin):
     model = Product
 
     list_display = ['name', 'price',]
     search_fields = ['name',]
+    ordering = ['-name',]
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductType, ProductTypeAdmin)
