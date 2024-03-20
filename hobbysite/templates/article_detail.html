@@ -1,0 +1,22 @@
+{% extends 'wiki_base.html' %}
+{% load static %}
+{% block title %}Wiki{% endblock %}
+{% block heading %}
+{% endblock heading %}
+{% block content %}
+        <div style="text-align: center;">
+            <h3 style="font-style: bold,italic; border:  3px solid #333; border-radius: 10px; padding: 10px; background-color: #f5f5f5; color: #0c0909;">
+                {{ article.title }}
+            </h3>
+        
+            <p style="font-size: 18px">
+                {{ article.entry }} 
+            </p>
+            
+            <h6>
+                <a href="/wiki/articles" style="font-weight: bold;">
+                    Back to Categories
+                </a>
+            </h6>
+        </div>xww
+{% endblock content %}

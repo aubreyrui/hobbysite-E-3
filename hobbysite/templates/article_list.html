@@ -1,0 +1,23 @@
+{% extends 'wiki_base.html' %}
+{% load static %}
+{% block title %}Wiki{% endblock %}
+    {% block heading %}
+    {% endblock heading %}
+{% block content %}
+    <h3 style = "font-family: 'Courier New'; font-weight:100; text-align: center;">  
+        Article Categories
+    </h3>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 20px;  text-align: center;">
+        {% for articlecategory in object_list %}
+        <div style="border: 1px solid black; padding: 10px; border-radius: 5px;">
+            <h3 style="margin-top: 0px; border: 3px solid; border-radius: 10px; background-color: azure;">{{ articlecategory.name }}</h3>
+            <p style="margin-bottom: 10px; text-align: justify;">{{ articlecategory.description }}</p>
+                <p style="text-align: center; text-decoration: underline;">See more: </p>
+                {% for article in articlecategory.article.all %}
+                <li style="margin-bottom: 5px;"><a href='{{ article.get_absolute_url }}'>{{ article.title }}</a></li>
+                {% endfor %}
+        </div>
+        {% endfor %} 
+    </div>
+{% endblock content%}
+    
