@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8"/>
-        <meta name="keywords" content="foo,bar" />
-        <meta name="description" content="foo"/>
-        <title>
-            {% block title %}
-            Merch Store
-            {% endblock title%}  
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> 
+            {% block title %}Blog{% endblock title %}
         </title>
     </head>
     <body>
-        <div>
+        <div id="content">
             {% block content %}
             {% endblock content %}
         </div>
