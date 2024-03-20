@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Commissions App{% endblock title %}
+{% block heading %} {% endblock heading %}
+{% block content %}
+<style>
+    .comments {
+        padding-top: 20%;
+        text-align: center;
+    }
+    
+</style>
+<body>
+    <h2> {{ commission.title }} </h2>
+    <h5>Created On: {{ commission.created_on }}</h5>
+    <h3>Total Spots Available: {{ commission.people_required }}</h3>
+    <p>{{ commission.description }}</p>
+</body>
+    
+    <p class="comments">
+        <h3>Comment Section</h3>
+        {% for comments in commission.commissions.all %}
+        <p>{{comments.updated_on}}: {{ comments.entry }}</p>
+        {% endfor %}
+    </p>
+    <a href="/commissions/list">Back to List</a>
+{% endblock content %}
