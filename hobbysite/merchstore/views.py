@@ -6,10 +6,10 @@ from .models import Product
 
 class ProductListView(ListView):
     model = Product
-    template_name = 'product_list.html'
+    template_name = 'merch_product_list.html'
 
 class ProductDetailView(DetailView):
     model = Product
-    template_name = 'product_detail.html'
+    template_name = 'merch_product_detail.html'
 
 # Create your views here.
