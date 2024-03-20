@@ -28,3 +28,4 @@ admin.site.register(ProductType, ProductTypeAdmin)
 
 
 # Register your models here.
+# added comments to make this file visible (for a weird reason)

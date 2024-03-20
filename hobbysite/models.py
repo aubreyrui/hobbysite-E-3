@@ -21,3 +21,4 @@ class Product(models.Model):
         return reverse('merchstore:product_detail', args=str(self.pk))
     
 # Create your models here.
+# added comments to make this file visible
