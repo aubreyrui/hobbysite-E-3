@@ -1,0 +1,12 @@
+{% extends 'blog_base.html' %}
+{% load static %}
+{% block title %} {{ article.title }} {% endblock title %}
+{% block content %}
+<h1>
+    {{ article.title }}
+</h1>
+<p> Created on: {{ article.created_on }} </p>
+<p> Updated last: {{ article.updated_on }} </p> 
+<p> Category: {{ article.category }} </p> <br>
+<p> Blog Proper: <br> {{ article.entry|linebreaks }} </p>
+{% endblock content %}
