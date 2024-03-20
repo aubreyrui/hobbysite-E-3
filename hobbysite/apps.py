@@ -5,4 +5,4 @@ class MerchstoreConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'merchstore'
 
-# added comments to make this file visible
+# added comments to make this file visible!
