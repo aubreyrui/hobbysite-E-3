@@ -1,0 +1,21 @@
+{% extends 'commissions_base.html' %}
+{% load static %}
+{% block title %}Commissions App{% endblock title %}
+{% block heading %} {% endblock heading %}
+{% block content %}
+<style>
+    .commission-container {
+        display: grid;
+        text-align: center;
+        align-self: center;
+    }
+</style>
+<h2> List of Current Available Commissions </h2>
+<div class="commission-container">
+    {% for commission in object_list %}
+        <p><a href="{{commission.get_absolute_url}}">
+            {{ commission.title }}</a>  - {{ commission.people_required }} Available Slots </p>
+        <p style="margin-top: -20px;"> created on: {{ commission.created_on}}</p>
+        {% endfor %}
+</div>
+{% endblock content %}
