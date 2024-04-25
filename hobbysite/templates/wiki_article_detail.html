@@ -7,7 +7,12 @@
         <div style="text-align: center;">
             <h3 style="font-style: bold,italic; border:  3px solid #333; border-radius: 10px; padding: 10px; background-color: #f5f5f5; color: #0c0909;">
                 {{ article.title }}
+                <h4>
+                    Created on: {{ article.created_on}}
+                    Updated on: {{ article.updated_on}}
+                </h4>
             </h3>
+
         
             <p style="font-size: 18px">
                 {{ article.entry }} 
@@ -18,5 +23,5 @@
                     Back to Categories
                 </a>
             </h6>
-        </div>xww
+        </div>
 {% endblock content %}
