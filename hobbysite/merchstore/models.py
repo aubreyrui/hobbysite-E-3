@@ -11,6 +11,9 @@ class ProductType(models.Model):
     class meta:
         ordering = ['name']
 
+    class meta:
+            ordering = ['name']
+
 class Product(models.Model):
     name = models.CharField(max_length = 255)
     description = models.TextField()
@@ -22,9 +25,11 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse('merchstore:product_detail', args=str(self.pk))
+
+    class meta:
+        ordering = ['name']
     
     class meta:
         ordering = ['name']
     
 # Create your models here.
-# added comments to make this file visible
