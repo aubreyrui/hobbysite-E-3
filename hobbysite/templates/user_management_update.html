@@ -1,0 +1,14 @@
+{% extends 'user_management_base.html' %}
+{% load static %}
+{% block title %}Profile{% endblock %}
+{% block heading %}
+{% endblock heading %}
+{% block form %}
+{% endblock form %}
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_div }}
+        <button type="submit" href:> Update</button>
+    </form>
+{% endblock content %}
