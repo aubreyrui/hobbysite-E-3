@@ -9,13 +9,14 @@ class ProfileUpdateView(UpdateView):
     template_name = "user_management_update.html"
     form_class = ProfileForm
 
-    def get_object(self, queryset=None):#https://stackoverflow.com/questions/6181041/updating-user-model-in-django-with-class-based-updateview
-        # This assumes that each user has a one-to-one relationship with a Profile
-        return self.request.user
-
     def form_valid(self, form):
-        self.object = form.save()
+        profile = self.request.user.profile
+        profile.display_name = form.cleaned_data['display_name'] #manually accessing the values
+        profile.email_address = form.cleaned_data['email_address']
+        profile.save()
+
         return super().form_valid(form)
     
     def get_success_url(self):
         return reverse_lazy("user_management:profile_update")    
+    
