@@ -39,14 +39,14 @@ class Product(models.Model):
          
     class meta:
         ordering = ['name']
-
+'''
 class Transaction(models.Model):
     buyer = models.ForeignKey(on_delete=models.SET_NULL) #add the profile (will determine this soon)
     product = models.ForeignKey(Product, on_delete=models.SET_NULL)
     amount = models.IntegerField()
     status = models.CharField()
     created_on = models.DateTimeField(auto_now_add=True)
-""" 
+
 Stock - whole number
 Status - character field with the following options:
 Available (This should be the default value)
@@ -66,6 +66,6 @@ Delivered
 Created On - datetime field, only gets set when the model is created
 
 
- """
+'''
     
 # Create your models here.
