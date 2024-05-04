@@ -12,9 +12,6 @@ class ProductType(models.Model):
     class meta:
         ordering = ['name']
 
-    class meta:
-            ordering = ['name']
-
 class Product(models.Model):
     name = models.CharField(max_length = 255)
     description = models.TextField()
@@ -70,8 +67,5 @@ Created On - datetime field, only gets set when the model is created
 
 
  """
-    
-    class meta:
-        ordering = ['name']
     
 # Create your models here.
