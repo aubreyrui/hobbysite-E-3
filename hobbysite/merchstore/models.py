@@ -32,26 +32,5 @@ class Transaction(models.Model):
     amount = models.IntegerField()
     status = models.CharField()
     created_on = models.DateTimeField(auto_now_add=True)
-""" 
-Stock - whole number
-Status - character field with the following options:
-Available (This should be the default value)
-On sale
-Out of stock (when stock is 0)
-
-Transaction
-Buyer - foreign key to Profile, set to NULL when deleted
-Product - foreign key to Product, set to NULL when deleted
-Amount - whole number which is the amount of Product to buy
-Status - character field with the following options:
-On cart
-To Pay
-To Ship
-To Receive
-Delivered
-Created On - datetime field, only gets set when the model is created
-
-
- """
     
 # Create your models here.
