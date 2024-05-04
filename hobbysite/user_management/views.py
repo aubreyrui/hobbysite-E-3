@@ -1,4 +1,3 @@
-from django.shortcuts import render, HttpResponseRedirect
 from django.views.generic.edit import UpdateView
 from .forms import ProfileForm
 from .models import Profile

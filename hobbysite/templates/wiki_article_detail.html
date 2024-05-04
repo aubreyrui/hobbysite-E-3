@@ -21,7 +21,12 @@
             
             <h6>
                 Read More Articles:
-                {% for article in article.category %}
+                {% for otherarticle in article.category %}
+                    {% if otherarticle.title = article.title %}
+                       <a href = "{{ otherarticle.get_absolue_url }}">
+                            {{ otherarticle.title }}
+                       </a> 
+                {% endfor %}
             </h6>
             <h6>
                 <a href="/wiki/articles" style="font-weight: bold;">

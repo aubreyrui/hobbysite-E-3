@@ -1,0 +1,19 @@
+{% extends 'wiki_base.html' %}
+{% load static %}
+{% block title %}Create an Article{% endblock %}
+{% block heading %}
+{% endblock heading %}
+{% block form %}
+{% endblock form %}
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_div }}
+        <button type="submit">Submit</button>
+    </form>
+        <h6>
+            <a href = '/wiki/articles'>
+                Back to Articles
+            </a>
+        </h6>
+{% endblock content %}
