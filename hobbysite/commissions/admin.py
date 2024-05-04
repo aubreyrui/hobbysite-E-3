@@ -1,14 +1,14 @@
 from django.contrib import admin
 
-from .models import Comment, Commission
+from .models import Job, Commission
 
-class CommentAdmin(admin.ModelAdmin):
-    model = Comment
+class JobAdmin(admin.ModelAdmin):
+    model = Job
 
 
 class CommissionAdmin(admin.ModelAdmin):
     model = Commission
 
 
-admin.site.register(Comment, CommentAdmin)
+admin.site.register(Job, JobAdmin)
 admin.site.register(Commission, CommissionAdmin)

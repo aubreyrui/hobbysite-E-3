@@ -5,17 +5,19 @@ from user_management.models import Profile
 
 
 class Commission(models.Model):
-    STATUS_OPTIONS = ( # https://stackoverflow.com/questions/18676156/how-to-properly-use-the-choices-field-option-in-django
-        ('OPEN', "Open"),
-        ('FULL', "Full"),
-		('COMPLETED', "Completed"),
-		('DISCONTINUED', "Discontinued"),
-    )
+    STATUS_CHOICES = { # https://stackoverflow.com/questions/18676156/how-to-properly-use-the-choices-field-option-in-django
+        "OPEN": "Open",
+        "FULL": "Full",
+        "COMPLETED": "Completed",
+        "DISCONTINUED": "Discontinued",
+    }
     title = models.CharField(max_length = 255)
     description = models.TextField(null = False)
-    status = models.CharField(max_length = 12,
-								choices = STATUS_OPTIONS,
-								default = 'OPEN')
+    status = models.CharField(
+        max_length = 12,
+        choices = STATUS_CHOICES.items(),
+        default = "OPEN",
+        )
     people_required = models.IntegerField(null = False)
     created_on = models.DateField(null = False, auto_now_add = True)
     updated_on = models.DateField(null = False, auto_now = True)
@@ -33,17 +35,19 @@ class Commission(models.Model):
 
 
 class Job(models.Model):
-    STATUS_OPTIONS = (
-		('OPEN', "Open"),
-		('FULL', "Full"),
-	)
+    STATUS_CHOICES = {
+		"OPEN": "Open",
+		"FULL": "Full",
+    }
 
     commission = models.ForeignKey(Commission, on_delete=models.CASCADE, related_name='commissions')
     role = models.CharField(max_length = 255)
     manpower_required = models.IntegerField()
-    status = models.CharField(max_length = 4,
-								choices = STATUS_OPTIONS,
-								default = 'OPEN')
+    status = models.CharField(
+        max_length = 4,
+		choices = STATUS_CHOICES.items(),
+		default = "OPEN",
+        )
     
 
     class Meta:
@@ -55,23 +59,25 @@ class Job(models.Model):
     
 
 class JobApplication(models.Model):
-    STATUS_OPTIONS = (
-		('PENDING', "Pending"),
-		('ACCEPTED', "Accepted"),
-		('REJECTED', "Rejected"),
-	)
+    STATUS_CHOICES = {
+		"PENDING": "Pending",
+		"ACCEPTED": "Accepted",
+		"REJECTED": "Rejected",
+    }
 	
     job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='job')
     applicant = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile')
-    status = models.CharField(max_length = 8,
-								choices = STATUS_OPTIONS,
-								default = 'PENDING')
+    status = models.CharField(
+        max_length = 8,
+		choices = STATUS_CHOICES.items(),
+		default = "PENDING",
+        )
     applied_on = models.DateField(null = False, auto_now_add = True)
 	
     class Meta:
         ordering = ['-applied_on'] # add priority for status
 
-    def status_priority (self): # find sources
+    def status_priority (self): 
 	    status_order = {
 			"Pending" : 1,
 			"Accepted" : 2,

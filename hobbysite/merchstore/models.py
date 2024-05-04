@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.core.validators import MinLengthValidator
+from user_management.models import Profile
 
 class ProductType(models.Model):
     name = models.CharField(max_length = 255)
@@ -23,7 +24,7 @@ class Product(models.Model):
         ]
     )
 
-    status = models.CharField()
+    status = models.CharField(max_length = 255)
 
     def __str__(self):
         return self.name
@@ -39,14 +40,14 @@ class Product(models.Model):
          
     class meta:
         ordering = ['name']
-'''
-class Transaction(models.Model):
-    buyer = models.ForeignKey(on_delete=models.SET_NULL) #add the profile (will determine this soon)
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL)
-    amount = models.IntegerField()
-    status = models.CharField()
-    created_on = models.DateTimeField(auto_now_add=True)
 
+class Transaction(models.Model):
+    buyer = models.ForeignKey(Profile, null=True, on_delete=models.SET_NULL) #add the profile (will determine this soon)
+    product = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL)
+    amount = models.IntegerField()
+    status = models.CharField(max_length = 255)
+    created_on = models.DateTimeField(auto_now_add=True)
+'''
 Stock - whole number
 Status - character field with the following options:
 Available (This should be the default value)
