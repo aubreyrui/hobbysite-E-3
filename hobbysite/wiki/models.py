@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from user_management.models import Profile
 
 class ArticleCategory(models.Model):
     name = models.CharField(max_length = 255, unique = True)
@@ -15,10 +16,13 @@ class ArticleCategory(models.Model):
 
 class Article(models.Model):
     title = models.CharField(max_length = 255)
-    category = models.ForeignKey(ArticleCategory, on_delete = models.CASCADE, related_name = 'article')
+    article_author = models.ForeignKey(Profile,on_delete= models.SET_NULL, related_name = "article_author" )
+    category = models.ForeignKey(ArticleCategory, on_delete = models.SET_NULL, related_name = 'article')
     entry = models.TextField()
+    header_image = models.ImageField(upload_to='images/', null = True) #toedit
     created_on = models.DateTimeField(auto_now_add = True)
     updated_on = models.DateTimeField(auto_now = True) #https://www.scaler.com/topics/django/django-datetimefield/ \
+    
     def __str__(self):
         return self.title
     
@@ -27,4 +31,20 @@ class Article(models.Model):
     
     class Meta:
         ordering = ['-created_on'] #https://docs.djangoproject.com/en/5.0/ref/models/options/
+
+class Comment(models.Model):
+    comment_author = models.ForeignKey(Profile,on_delete= models.SET_NULL, related_name = "comment_author" )
+    article = models.ForeignKey(Article, on_delete = models.CASCADE)
+    entry = models.TextField()
+    created_on = models.DateTimeField(auto_now_add = True)
+    updated_on = models.DateTimeField(auto_now = True) #https://www.scaler.com/topics/django/django-datetimefield/ \        
+    
+    def __str__(self):
+        return self.entry
+    
+    class Meta:
+        ordering = ['created_on']
+  
+
+
 # Create your models here.
