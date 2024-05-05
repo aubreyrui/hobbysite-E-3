@@ -10,7 +10,7 @@ class ArticleCreateForms(forms.ModelForm):
 class ArticleUpdateForms(forms.ModelForm): #basically a template!
     class Meta:
         model = Article
-        exclude = ["created_on", "Author"]
+        exclude = ["created_on", "article_author"]
 
 class CommentForms (forms.ModelForm):
     class Meta:

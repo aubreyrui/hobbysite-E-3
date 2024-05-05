@@ -6,11 +6,12 @@
 {% block content %}
         <div style="text-align: center;">
             <h3 style="font-style: bold,italic; border:  3px solid #333; border-radius: 10px; padding: 10px; background-color: #f5f5f5; color: #0c0909;">
-                {{ article.title }}
+                {{ article.title }} by {{ article.article_author }}
                 Category: {{ article.category }}
                 <h4>
                     Created on: {{ article.created_on}}
                     Updated on: {{ article.updated_on}}
+
                 </h4>
             </h3>
 
@@ -19,22 +20,23 @@
                 {{ article.entry }} 
             </p>
             <h6>
-                <!-- detects if the author is the requested user then it will link to editing the article-->
+                <!-- detects if the author is the requested user then it will link to editing the article (this works just need to change urls)-->
                 {% if article.article_author == request.user.profile %}
                     <a href = "/wiki/article/{{ article.pk }}/edit"> Edit my Article</a>
                 {% endif %} 
+        
             </h6>
             <h6>
                 Read More Articles:
-                {% for otherarticle in article.all %} <!-- to edit: not showing so far-->
-                    {% if othertherarticle.category ==  article.category %}
+                {% for otherarticle in related_articles %} <!-- from ctx to edit: not showing so far-->
+                    <p>{{ otherarticle.title }}</p>
                         {% if otherarticle.title != article.title %}
                             <a href = "{{ otherarticle.get_absolute_url }}">
                                     {{ otherarticle.title }}
                             </a> 
                         {% endif %}
-                    {% endif %}
                 {% endfor %}
+
             </h6>
 
             

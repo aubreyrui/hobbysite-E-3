@@ -31,6 +31,10 @@ def article_list(request):
 def article_detail(request, pk):
     article = Article.objects.get(pk=pk)
     related_articles = Article.objects.filter(category = article.category).exclude(article) #all articles in category without the same article
+
+    for related_article in related_articles: #to delete and to fix
+        print(related_article.title)
+
     ctx = { 
         'article': article, 
         'related_articles': related_articles
@@ -52,7 +56,8 @@ class ArticleUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ArticleUpdateForms
 
     def form_valid(self, form):
-        form.instance.article = self.request.article
+        article = self.get_object()#gets the article then passes it to the instance 
+        form.instance.article = article
         self.object = form.save(commit=False)
         self.object.save()
         return super().form_valid(form)
