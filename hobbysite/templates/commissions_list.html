@@ -14,7 +14,8 @@
 <div class="commission-container">
     {% for commission in object_list %}
         <p><a href="{{commission.get_absolute_url}}">
-            {{ commission.title }}</a>  - {{ commission.people_required }} Available Slots </p>
+            {{ commission.title }}</a>  - {{ commission.people_required }} Available Slots 
+            Status: {{ commission.get_status_display }} </p>
         <p style="margin-top: -20px;"> created on: {{ commission.created_on}}</p>
         {% endfor %}
     <a href="/commissions/add">Create a Commission</a>
