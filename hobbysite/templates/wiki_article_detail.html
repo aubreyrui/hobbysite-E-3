@@ -1,6 +1,6 @@
 {% extends 'wiki_base.html' %}
 {% load static %}
-{% block title %}Wiki{% endblock %}
+{% block title %}Wiki{% endblock title%}
 {% block heading %}
 {% endblock heading %}
 {% block content %}
@@ -18,16 +18,26 @@
             <p style="font-size: 18px">
                 {{ article.entry }} 
             </p>
-            
+            <h6>
+                <!-- detects if the author is the requested user then it will link to editing the article-->
+                {% if article.article_author == request.user.profile %}
+                    <a href = "/wiki/article/{{ article.pk }}/edit"> Edit my Article</a>
+                {% endif %} 
+            </h6>
             <h6>
                 Read More Articles:
-                {% for otherarticle in article.category %}
-                    {% if otherarticle.title = article.title %}
-                       <a href = "{{ otherarticle.get_absolue_url }}">
-                            {{ otherarticle.title }}
-                       </a> 
+                {% for otherarticle in article.all %} <!-- to edit: not showing so far-->
+                    {% if othertherarticle.category ==  article.category %}
+                        {% if otherarticle.title != article.title %}
+                            <a href = "{{ otherarticle.get_absolute_url }}">
+                                    {{ otherarticle.title }}
+                            </a> 
+                        {% endif %}
+                    {% endif %}
                 {% endfor %}
             </h6>
+
+            
             <h6>
                 <a href="/wiki/articles" style="font-weight: bold;">
                     Back to Categories

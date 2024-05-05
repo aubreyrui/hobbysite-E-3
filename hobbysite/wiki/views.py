@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -30,8 +30,10 @@ def article_list(request):
 
 def article_detail(request, pk):
     article = Article.objects.get(pk=pk)
+    related_articles = Article.objects.filter(category = article.category).exclude(article) #all articles in category without the same article
     ctx = { 
-        'article': article  
+        'article': article, 
+        'related_articles': related_articles
         }
     return render(request, 'wiki_article_detail.html', ctx)
 
@@ -40,9 +42,34 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
     template_name = "wiki_article_create.html"
     form_class = ArticleCreateForms
 
+    def form_valid(self, form):
+        form.instance.article_author = self.request.user.profile #article assigned author is the user creating it
+        return super().form_valid(form)
+
 class ArticleUpdateView(LoginRequiredMixin, UpdateView):
     model = Article
     template_name = "wiki_article_update.html"
-    form_class = ArticlUpdateForms
+    form_class = ArticleUpdateForms
+
+    def form_valid(self, form):
+        form.instance.article = self.request.article
+        self.object = form.save(commit=False)
+        self.object.save()
+        return super().form_valid(form)
+
+    ### to add def form valid
+
+def add_comment(request, pk): ### not sure yet
+    article = Article.objects.get(pk=pk) #get article we want to comment on
+    if request.method == 'POST':
+        form = CommentForms(request.POST)
+        if form.is_valid():
+            comment = form.save()
+            comment.article = article # whicher article it goes to/connected
+            comment.author = request.user.profile
+            comment.save()
+        return redirect('article_detail', pk=pk)
+    
+    
 # Create your views here.
     
