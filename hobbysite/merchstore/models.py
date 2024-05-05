@@ -25,12 +25,5 @@ class Product(models.Model):
 
     class meta:
         ordering = ['name']
-
-class Transaction(models.Model):
-    buyer = models.ForeignKey(on_delete=models.SET_NULL) #add the profile (will determine this soon)
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL)
-    amount = models.IntegerField()
-    status = models.CharField()
-    created_on = models.DateTimeField(auto_now_add=True)
     
 # Create your models here.
