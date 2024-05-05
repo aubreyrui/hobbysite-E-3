@@ -11,14 +11,17 @@ Merch Cart
 {% if request.user.is_authenticated %}
 
 {% for items in object_list %}
+{% if request.user.username is transaction.buyer %}
 <ul>
     <li>{{ items.product.name }}</li>
     <ul>
-        <li>{{ items.product.price }}</li>
-        <li>{{ items.product.producttype }}</li>
-        <li>{{ items.amount }}</li>
+        <li>Price: {{ items.product.price }}</li>
+        <li>Product Type: {{ items.product.producttype }}</li>
+        <li>Amount: {{ items.amount }}</li>
+        <li>Status: {{ items.status }}</li>
     </ul>
 </ul>
+{% end if%}
 
 {% endfor %}
 

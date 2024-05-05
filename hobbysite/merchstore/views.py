@@ -23,7 +23,7 @@ class ProductCreateView(CreateView, LoginRequiredMixin):
     form_class = CreateProductForm
 
     def form_valid(self, form):
-        form.instance.author = self.request.user.profile
+        form.instance.owner = self.request.user.profile
         return super().form_valid(form)
 
 class ProductUpdateView(UpdateView, LoginRequiredMixin):
@@ -33,12 +33,12 @@ class ProductUpdateView(UpdateView, LoginRequiredMixin):
 
     def form_valid(self, form):
         form.instance.author = self.request.user.profile
-        form.instance.recipe = Product.objects.get(pk=self.kwargs["pk"])
+        form.instance.product = Product.objects.get(pk=self.kwargs["pk"])
         return super().form_valid(form)
     
     def get_success_url(self):
         return reverse_lazy(
-            "merchstore:product_detail", kwargs={"pk": self.object.recipe.pk}
+            "merchstore:product_detail", kwargs={"pk":self.object.product.pk}
         )
 
 class ProductCartList(ListView, LoginRequiredMixin):

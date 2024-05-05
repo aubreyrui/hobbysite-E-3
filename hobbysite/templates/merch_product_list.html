@@ -13,6 +13,9 @@ Merch List
 <ul>
     {% for product in object_list %}
     <li><a href="{{ product.get_absolute_url }}">[{{ product.producttype }}] {{ product.name }}</a></li>
+    <ul>
+        <li>{{ product.owner }}</li>
+    </ul>
     {% endfor %}
 </ul>
 

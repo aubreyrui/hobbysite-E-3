@@ -83,3 +83,6 @@ class Transaction(models.Model):
             return "You can't purchase more than " + self.product.name + " available stock!"
         else:
             return "You can purchase!"
+    
+    def total(self):
+        return self.amount*self.product.price

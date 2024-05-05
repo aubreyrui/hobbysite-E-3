@@ -19,6 +19,42 @@
     <li><p><b>Product Description:</b><br> {{ product.description }}</p></li>
 </ul>
 <br>
+
+{% if request.user.is_authenticated %}
+<!-- Dealing with Login Users-->
+{% if request.user.username is product.owner %}
+
+<h3><a href="{% url 'merchstore:product_update' pk=product.pk %}">Update Product</a></h3>
+
+{% else %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Submit</button>
+</form>
+
+{% endif %}
+
+<!-- Dealing with Non-Login Users-->
+{% else %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Submit</button>
+</form>
+
+{% endif %}
+
 <p><a href="/merchstore/items">Return to List</a></p>
+
+
+<!--If the Transaction form has all the necessary details 
+    and is saved,  the user will be redirected according to the login status. 
+    If the user is authenticated, then they will be redirected to the CartView. 
+    Otherwise, they will be redirected to the login page. 
+    Once logged-in, only then can the transaction be saved.
+-->
 
 {% endblock content %}
