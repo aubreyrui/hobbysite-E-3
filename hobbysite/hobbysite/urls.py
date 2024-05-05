@@ -19,13 +19,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('blog/', include('blog.urls', namespace = 'blog')),
-    path('', include('wiki.urls', namespace = 'wiki')),
-    path('', include('commissions.urls', namespace='commissions')),
-<<<<<<< HEAD
     path('merchstore/', include('merchstore.urls', namespace='merchstore')),
-=======
-    path('merch/', include('merchstore.urls', namespace='merchstore')),
->>>>>>> 94c71c04d2f3762380d36f8551728a3504fe181e
-    path('',include('user_management.urls', namespace ="user_management"))
+    path('',include('user_management.urls', namespace ="user_management")),
+    path('accounts/', include('django.contrib.auth.urls'))
+    # ^^ for testing purposes
 ]

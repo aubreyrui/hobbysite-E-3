@@ -41,9 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'merchstore',
-    'wiki',
-    'commissions',
-    'blog',
     'user_management'
 ]
 
@@ -124,6 +121,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+LOGIN_REDIRECT_URL = '/merchstore/items' 
+# This login redirect url is for testing purposes of the merchstore app
+# please change this once general log-in is implemented
+LOGOUT_REDIRECT_URL = '/login' 
+# replace this to login link suitable for general log-in
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
