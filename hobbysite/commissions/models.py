@@ -2,7 +2,6 @@ from datetime import datetime
 from django.db import models
 from django.urls import reverse
 from user_management.models import Profile
-from django.utils.translation import gettext_lazy as _
 
 
 class Commission(models.Model):
@@ -26,7 +25,7 @@ class Commission(models.Model):
 
 
     class Meta:
-        ordering = ['status', 'created_on']
+        ordering = ['status', '-created_on']
     
     
     def __str__(self):
@@ -37,18 +36,18 @@ class Commission(models.Model):
 
 
 class Job(models.Model):
-    STATUS_CHOICES = {
-		0: "Open",
-		1: "Full",
-    }
+
+    class StatusChoices(models.IntegerChoices):
+        OPEN = 1, "Open"
+        FULL = 2, "Full"
+        
 
     commission = models.ForeignKey(Commission, on_delete=models.CASCADE, related_name='commissions')
     role = models.CharField(max_length = 255)
     manpower_required = models.IntegerField()
-    status = models.CharField(
-        max_length = 4,
-		choices = STATUS_CHOICES.items(),
-		default = 0,
+    status = models.PositiveSmallIntegerField(
+		choices = StatusChoices.choices,
+		default = StatusChoices.OPEN,
         )
     
 
@@ -57,32 +56,25 @@ class Job(models.Model):
 
         
     def __str__(self):
-        return self.commission
+        return str(self.commission)
     
 
 class JobApplication(models.Model):
-    STATUS_CHOICES = {
-		"PENDING": "Pending",
-		"ACCEPTED": "Accepted",
-		"REJECTED": "Rejected",
-    }
+
+    class StatusChoices(models.IntegerChoices):
+        PENDING = 1, "Pending"
+        ACCEPTED = 2, "Accepted"
+        REJECTED = 3, "Rejected"
+
 	
     job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='job')
     applicant = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile')
     status = models.CharField(
         max_length = 8,
-		choices = STATUS_CHOICES.items(),
-		default = "PENDING",
+		choices = StatusChoices.choices,
+		default = StatusChoices.PENDING,
         )
     applied_on = models.DateField(null = False, auto_now_add = True)
 	
     class Meta:
-        ordering = ['-applied_on'] # add priority for status
-
-    def status_priority (self): 
-	    status_order = {
-			"Pending" : 1,
-			"Accepted" : 2,
-			"Rejected" : 3,
-		}
-        # return status_order.get(self.status, 0)
+        ordering = ['status', '-applied_on'] # add priority for status

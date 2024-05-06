@@ -1,4 +1,4 @@
-{% extends 'commissions_base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block title %}Commissions App{% endblock title %}
 {% block heading %} {% endblock heading %}
@@ -9,6 +9,7 @@
         text-align: center;
         align-self: center;
     }
+    h2 {text-align: center;}
 </style>
 <h2> List of Current Available Commissions </h2>
 <div class="commission-container">
@@ -21,3 +22,7 @@
     <a href="/commissions/add">Create a Commission</a>
 </div>
 {% endblock content %}
+{% block form %}
+{% endblock form %}
+{% block scripts %}
+{% endblock scripts %}
