@@ -3,19 +3,29 @@
 {% block title %}Commissions App{% endblock title %}
 {% block content %}
 <style>
-    .commission-create {
+    body {
         text-align: center;
         align-self: center;
     }
-    h2 {text-align: center;}
 </style>
-   <h2> Create a New Commission</h2>
 {% endblock content %}
 {% block form %}
-    <form class="commission-create" action="" method="post">{% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Save">
-    </form>
+<body>
+    <div class="commission-create">
+        <h2> Create a New Commission</h2>
+        <form action="" method="post">{% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Save">
+        </form>
+    </div>
+    <div class="job-create">
+        <h3> Create a New Job </h3>
+        <form action="" method="post">{% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Save">
+        </form>
+    </div>
+</body>
 {% endblock form %}
 {% block scripts %}
 {% endblock scripts %}

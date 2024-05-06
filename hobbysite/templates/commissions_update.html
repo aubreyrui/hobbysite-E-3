@@ -1,5 +1,23 @@
-{% extends 'commissions_base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block title %}Commissions App{% endblock title %}
 {% block heading %} {% endblock heading %}
 {% block content %}
+<style>
+    body {
+        text-align: center;
+        align-self: center;
+    }
+</style>
+<body>
+    <h2> Update your Commission: {{ commission.title }}</h2>
+    <form action="" method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Update">
+    </form>
+</body>
+{% endblock content %}
+{% block form %}
+{% endblock form %}
+{% block scripts %}
+{% endblock scripts %}

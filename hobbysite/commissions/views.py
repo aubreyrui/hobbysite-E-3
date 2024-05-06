@@ -2,12 +2,11 @@ from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-
-from .forms import CommissionForm
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
-from .models import Commission
+from .models import Commission, JobApplication
+from .forms import CommissionForm, JobApplicationForm 
 
 def commissions_list(request):
     commissions = Commission.objects.all()
@@ -51,6 +50,22 @@ class CommissionsCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user.profile
         return super().form_valid(form)
 
-class CommissionsUpdateView(UpdateView):
+
+class JobCreateView(LoginRequiredMixin, CreateView):
+    model = JobApplication
+    template_name = 'commissions_create.html'
+    form_class = JobApplicationForm
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user.profile
+        return super().form_valid(form)
+
+
+class CommissionsUpdateView(LoginRequiredMixin, UserPassesTestMixin,UpdateView):
     model = Commission
     template_name = 'commissions_update.html'
+    form_class = CommissionForm
+
+    def test_func(self):
+        obj = self.request.user.profile
+        return obj.user == self.request.user
