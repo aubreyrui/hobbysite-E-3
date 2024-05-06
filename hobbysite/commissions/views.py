@@ -2,6 +2,10 @@ from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+from .forms import CommissionForm
+
 
 from .models import Commission
 
@@ -38,10 +42,14 @@ class CommissionsDetailView(DetailView):
     template_name = 'commissions_detail.html'
 
 
-class CommissionsCreateView(CreateView):
+class CommissionsCreateView(LoginRequiredMixin, CreateView):
     model = Commission
     template_name = 'commissions_create.html'
+    form_class = CommissionForm
 
+    def form_valid(self, form):
+        form.instance.author = self.request.user.profile
+        return super().form_valid(form)
 
 class CommissionsUpdateView(UpdateView):
     model = Commission

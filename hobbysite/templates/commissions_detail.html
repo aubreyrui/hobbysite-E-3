@@ -1,18 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}Commissions App{% endblock title %}
-{% block heading %} {% endblock heading %}
 {% block content %}
 <style>
-    .comments {
-        padding-top: 20%;
-        text-align: center;
-    }
-    .commission {
-        text-align: center;
-    }
     .job {
         padding-top: 5%;
+    }
+    body {
         text-align: center;
     }
 </style>
@@ -31,13 +25,7 @@
         <p>Manpower Required for {{ job.role }}: {{job.manpower_required}}</p>
         {% endfor %}
     </div>
-    
-    <p class="comments">
-        <h3>Comment Section</h3>
-        {% for comments in commission.commissions.all %}
-        <p>{{comments.updated_on}}: {{ comments.entry }}</p>
-        {% endfor %}
-    </p>
+   
     <a href="/commissions/list">Back to List</a>
 </body>
 {% endblock content %}

@@ -23,7 +23,7 @@
             <a href="/profile/profile/">Update my Profile</a>
         </h2>
     </div>
-    <div id="content">
+    <div style="text-align: center;" id="content">
         {% block content %}{% endblock content %}
         {% block form %}
             {% if request.user.is_authenticated %}
@@ -41,6 +41,7 @@
             {% endif %}
         {% endblock form%}
     </div>
-    {% block scripts %}{% endblock scripts %}
+    {% block scripts %}
+    {% endblock scripts %}
 </body>
 </html>
