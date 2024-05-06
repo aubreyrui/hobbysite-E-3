@@ -7,6 +7,17 @@
     <h3 style = "font-family: 'Courier New'; font-weight:100; text-align: center;">  
         Article Categories
     </h3>
+    <div>
+        <h3 style="margin: 0 auto; border: 3px solid; border-radius: 10px; background-color: azure; text-align: center; width: 100px;">My Articles</h3>
+
+            {% for articlecategory in object_list %}
+                {% for article in articlecategory.article.all %}
+                    {% if article.article_author == request.user.profile %}
+                        <li style="margin-bottom: 5px; text-align: center;"><a href='{{ article.get_absolute_url }}'>{{ article.title }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+    </div>
     <div style="display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 20px;  text-align: center;">
         {% for articlecategory in object_list %}
         <div style="border: 1px solid black; padding: 10px; border-radius: 5px;">
@@ -14,10 +25,16 @@
             <p style="margin-bottom: 10px; text-align: justify;">{{ articlecategory.description }}</p>
                 <p style="text-align: center; text-decoration: underline;">See more: </p>
                 {% for article in articlecategory.article.all %}
-                <li style="margin-bottom: 5px;"><a href='{{ article.get_absolute_url }}'>{{ article.title }}</a></li>
+                    {% if article.article_author != request.user.profile %}
+                        <li style="margin-bottom: 5px;"><a href='{{ article.get_absolute_url }}'>{{ article.title }}</a></li>
+                    {% endif %}
                 {% endfor %}
         </div>
         {% endfor %} 
     </div>
+
+    <h3>
+        <a href="/wiki/article/add"> Create an Article </a>
+    </h3>
 {% endblock content%}
     

@@ -13,7 +13,7 @@ class ArticleCategoryListView(ListView):
     model = ArticleCategory
     template_name = "wiki_article_list.html"
 
-class ArticleDetailView( DetailView):
+class ArticleDetailView(DetailView):
     model = Article
     template_name = "wiki_article_detail.html"
 
@@ -30,14 +30,23 @@ def article_list(request):
 
 def article_detail(request, pk):
     article = Article.objects.get(pk=pk)
-    related_articles = Article.objects.filter(category = article.category).exclude(article) #all articles in category without the same article
-
-    for related_article in related_articles: #to delete and to fix
-        print(related_article.title)
-
+    related_articles = Article.objects.filter(category = article.category).exclude(pk=pk) #all articles in category without the same article
+    comments = article.comments.all()
+   
+    form = CommentForms()
+    if request.method == 'POST': #toedit
+        form = CommentForms(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.article = article
+            comment.author = request.user.profile
+            comment.save()
+            return redirect('article_detail', pk=pk)
     ctx = { 
         'article': article, 
-        'related_articles': related_articles
+        'related_articles': related_articles,
+        'form': form,
+        'comments': comments
         }
     return render(request, 'wiki_article_detail.html', ctx)
 
@@ -62,18 +71,10 @@ class ArticleUpdateView(LoginRequiredMixin, UpdateView):
         self.object.save()
         return super().form_valid(form)
 
-    ### to add def form valid
 
-def add_comment(request, pk): ### not sure yet
-    article = Article.objects.get(pk=pk) #get article we want to comment on
-    if request.method == 'POST':
-        form = CommentForms(request.POST)
-        if form.is_valid():
-            comment = form.save()
-            comment.article = article # whicher article it goes to/connected
-            comment.author = request.user.profile
-            comment.save()
-        return redirect('article_detail', pk=pk)
+#def add_comment(request, pk): ### not sure yet
+    #article = Article.objects.get(pk=pk) #get article we want to comment on
+    
     
     
 # Create your views here.

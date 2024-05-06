@@ -27,16 +27,30 @@
         
             </h6>
             <h6>
-                Read More Articles:
-                {% for otherarticle in related_articles %} <!-- from ctx to edit: not showing so far-->
-                    <p>{{ otherarticle.title }}</p>
-                        {% if otherarticle.title != article.title %}
-                            <a href = "{{ otherarticle.get_absolute_url }}">
-                                    {{ otherarticle.title }}
-                            </a> 
-                        {% endif %}
+                Read More from {{ article.category }}: <!-- to edit-->
+            </h6>
+                {% for article in articlecategory.article.all %}
+                    <li style="margin-bottom: 5px;"><a href='{{ article.get_absolute_url }}'>{{ article.title }}</a></li>
                 {% endfor %}
+                    {% if other_article.category == article.category and other_article != article %}
+                        <p><a href="{{ other_article.get_absolute_url }}">{{ other_article.title }}</a></p>
+                    {% endif %}
 
+            
+
+            <form action= '' method = "POST">
+                {% csrf_token %}
+                {{ form }}
+                <button type="submit">Add Comment</button>
+            </form>
+
+            <h6>
+                {% for comments in comments.article %}
+                    {{ comments.updated_on }}: by {{ comments.comment_author }}
+                    <p>
+                        {{ comments.entry }}
+                    </p>
+                {% endfor %}
             </h6>
 
             

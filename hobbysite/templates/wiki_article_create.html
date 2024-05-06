@@ -6,7 +6,7 @@
 {% block form %}
 {% endblock form %}
 {% block content %}
-    <form method="POST" enctype="multipart/form-data"></form>>
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_div }}
         <button type="submit">Submit</button>
