@@ -1,4 +1,4 @@
-{% extends 'wiki_base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block title %}Article Update{% endblock %}
 {% block heading %}
@@ -6,7 +6,7 @@
 {% block form %}
 {% endblock form %}
 {% block content %}
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_div }}
         <button type="submit"> Update</button>

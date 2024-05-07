@@ -6,7 +6,7 @@ from django.views.generic.edit import CreateView
 from django.views.generic.edit import UpdateView
 from django.db.models import Q
 
-from .models import ArticleCategory, Article
+from .models import ArticleCategory, Article, Comment
 from .forms import ArticleCreateForms, CommentForms, ArticleUpdateForms
 
 class ArticleCategoryListView(ListView):
@@ -17,39 +17,29 @@ class ArticleDetailView(DetailView):
     model = Article
     template_name = "wiki_article_detail.html"
 
-def article_list(request):
-    my_articles = Article.objects.filter(article_author = request.user) #https://stackoverflow.com/questions/44464544/django-authentication-filter-only-user-created-not-all-records-in-view
-    other_articles = Article.objects.filter(~Q(article_author = request.user)) #https://docs.djangoproject.com/en/5.0/topics/db/queries/
-    categories = ArticleCategory.objects.all()
-    ctx = {
-    'my_articles': my_articles,
-    'categories': categories,
-    'other_articles': other_articles
-    }
-    return render(request, 'wiki_article_list.html', ctx)
-
-def article_detail(request, pk):
-    article = Article.objects.get(pk=pk)
-    related_articles = Article.objects.filter(category = article.category).exclude(pk=pk) #all articles in category without the same article
-    comments = article.comments.all()
-   
-    form = CommentForms()
-    if request.method == 'POST': #toedit
+    def get_context_data(self, **kwargs): # from Django Book
+        context = super().get_context_data(**kwargs) #overides the other get_context
+        context['form'] = CommentForms() #instances of form is the comment forms
+        context['comments'] = Comment.objects.all() #connects each comment to all the 
+        context['articles'] = Article.objects.all()
+        context['header_image'] = Article.header_image
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
         form = CommentForms(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.article = article
-            comment.author = request.user.profile
+            comment.article = self.object
+            comment.comment_author = self.request.user.profile
             comment.save()
-            return redirect('article_detail', pk=pk)
-    ctx = { 
-        'article': article, 
-        'related_articles': related_articles,
-        'form': form,
-        'comments': comments
-        }
-    return render(request, 'wiki_article_detail.html', ctx)
-
+            return self.get(request, *args, **kwargs)
+        else:
+            self.object_list = self.get_queryset()
+            context = self.get_context_data(**kwargs)
+            context['form'] = form
+            return self.render_to_response(context)
+    
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
     template_name = "wiki_article_create.html"
@@ -70,12 +60,6 @@ class ArticleUpdateView(LoginRequiredMixin, UpdateView):
         self.object = form.save(commit=False)
         self.object.save()
         return super().form_valid(form)
-
-
-#def add_comment(request, pk): ### not sure yet
-    #article = Article.objects.get(pk=pk) #get article we want to comment on
-    
-    
     
 # Create your views here.
     

@@ -1,24 +1,47 @@
-{% extends 'wiki_base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block title %}Wiki{% endblock title%}
 {% block heading %}
 {% endblock heading %}
 {% block content %}
+
+<style>
+    img{
+    clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+    width: 300px;
+    height: calc(150px/1.15);
+    filter: grayscale(1);
+    transition-duration: 0.5s;
+    z-index: 0;
+}
+    img:hover{
+        filter: grayscale(0);
+        transform: scale(1.3);
+        transition-duration: 0.4s;
+        z-index: 1; /*https://www.w3schools.com/cssref/pr_pos_z-index.php*/
+    }
+</style>
         <div style="text-align: center;">
-            <h3 style="font-style: bold,italic; border:  3px solid #333; border-radius: 10px; padding: 10px; background-color: #f5f5f5; color: #0c0909;">
+            <h3 style="font-style: bold,italic; border:  3px solid #333; border-radius: 10px; padding: 10px; background-color: #f5f5f5; color: #0c0909; width: auto 0;">
                 {{ article.title }} by {{ article.article_author }}
-                Category: {{ article.category }}
                 <h4>
-                    Created on: {{ article.created_on}}
-                    Updated on: {{ article.updated_on}}
-
+                    Category: {{ article.category }}
                 </h4>
-            </h3>
-
+                <h4 style="font-style: italic;">
+                    Created on: {{ article.created_on}}
+                </h4>
+                <h4 style="font-style: italic;">
+                    Updated on: {{ article.updated_on}}
+                </h4>
+            </h3> 
         
+            <img src="{{ article.header_image.url }}" style = "width: auto; max-height: 300px;" >
+    
+
             <p style="font-size: 18px">
                 {{ article.entry }} 
             </p>
+
             <h6>
                 <!-- detects if the author is the requested user then it will link to editing the article (this works just need to change urls)-->
                 {% if article.article_author == request.user.profile %}
@@ -26,30 +49,40 @@
                 {% endif %} 
         
             </h6>
+
             <h6>
-                Read More from {{ article.category }}: <!-- to edit-->
+                Read More from {{ article.category }}: 
             </h6>
-                {% for article in articlecategory.article.all %}
-                    <li style="margin-bottom: 5px;"><a href='{{ article.get_absolute_url }}'>{{ article.title }}</a></li>
-                {% endfor %}
-                    {% if other_article.category == article.category and other_article != article %}
-                        <p><a href="{{ other_article.get_absolute_url }}">{{ other_article.title }}</a></p>
-                    {% endif %}
-
-            
-
-            <form action= '' method = "POST">
-                {% csrf_token %}
-                {{ form }}
-                <button type="submit">Add Comment</button>
-            </form>
 
             <h6>
-                {% for comments in comments.article %}
-                    {{ comments.updated_on }}: by {{ comments.comment_author }}
-                    <p>
-                        {{ comments.entry }}
-                    </p>
+            {% for related_article in articles %} 
+                {% if related_article.category == article.category %}
+                    {%if related_article != article %}
+                         <li><a href="{{ related_article.get_absolute_url }}">{{ related_article.title }}</a></li>
+                    {% endif %}
+                {% endif %}
+             {% endfor %}
+             </h6>
+            
+            {% if request.user.is_authenticated %}
+                <form action= '' method = "POST" >
+                    {% csrf_token %}
+                    {{ form }}
+                    <button type="submit">Add Comment</button>
+                </form>
+            {% endif %}
+
+            <h6>
+                Comments
+            </h6>
+            <h6>
+                {% for comment in comments %}
+                    {% if comment.article == article %}
+                        {{ comment.updated_on }}: by {{ comment.comment_author }}
+                        <p>
+                            {{ comment.entry }}
+                        </p>
+                    {% endif %}
                 {% endfor %}
             </h6>
 
@@ -61,3 +94,7 @@
             </h6>
         </div>
 {% endblock content %}
+{% block form %}
+{% endblock form %}
+{% block scripts %}
+{% endblock scripts %}

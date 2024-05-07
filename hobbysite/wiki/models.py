@@ -43,7 +43,7 @@ class Comment(models.Model):
         return self.entry
     
     class Meta:
-        ordering = ['created_on']
+        ordering = ['-created_on']
   
 
 
