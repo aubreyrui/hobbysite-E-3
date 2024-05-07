@@ -1,10 +1,58 @@
-{% extends 'blog_base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block title %} {{ article.title }} {% endblock title %}
 {% block content %}
 <h1>
     {{ article.title }}
 </h1>
+
+<h2>
+    {% if article.article_author == request.user.profile %}     <!--editable when article owner is logged in-->
+        <a href = "/blog/article/{{ article.pk }}/edit"> Edit my Article</a>
+    {% endif %} 
+
+    {% if request.user.is_authenticated %}
+    <form method = "POST">
+        {% csrf_token %}
+        {{ form.as_div }}
+        <button type="submit">Add Comment</button>
+    </form>
+        {% endif %}
+</h2>
+
+<h3>
+    {% for comment in comments %}
+        {% if comment.article == article %}
+            {{ comment.created_on }} by {{ comment.comment_author }}
+            <p>
+                {{ comment.entry }}
+            </p>
+        {% endif %}
+    {% endfor %}
+</h3>
+
+<h4>
+    Read more: {{article.category}}
+</h4>
+
+</h5>
+    {% for related_article in articles %} 
+        {% if related_article.category == article.category %}
+            {%if related_article != article %}
+                 <li><a href="{{ related_article.get_absolute_url }}">
+                    {{ related_article.title }}
+                </a></li>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</h5>
+
+<h6>
+    <a href="/blog/articles">
+        Go back to Article List
+    </a>
+</h6>
+
 <p> Created on: {{ article.created_on }} </p>
 <p> Updated last: {{ article.updated_on }} </p> 
 <p> Category: {{ article.category }} </p> <br>

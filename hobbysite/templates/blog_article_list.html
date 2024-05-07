@@ -1,17 +1,48 @@
-{% extends 'blog_base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block title %}Blog{% endblock title %}
 {% block content %}
 <h1>
     Article List
 </h1>
-<ul>
-    {% for article in object_list %}
-    <li> 
-        <p> {{ article.category }} </p>
-        <p> {{ article.description }} </p>
-        <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
-    </li>
+
+<h2>
+    Your Articles
+    {% for articlecateg in object_list %}
+        {% for article in articlecategory.article.all %}
+            {% if article.article_author == request.user.profile %}
+                <li>
+                    <a href="{{ article.get_absolute_url }}">
+                        {{ article.title }}
+                    </a>
+                </li>
+            {% endif %}
+        {% endfor %}
     {% endfor %}
-</ul>
+</h2>
+
+<h3>
+    All Articles
+    {% for articlecategory in object_list %}
+        <p>{{ articlecategory.name }}</p>
+        <p>{{ articlecategory.description }}</p>
+        {% if not articlecategory.article.all %}
+            <p>No available articles.</p>
+        {% else %}
+            {% for article in articlecategory.article.all %}
+                {% if article.article_author != request.user.profile %}
+                    <li>
+                        <a href="{{ article.get_absolute_url }}">
+                            {{ article.title }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %} 
+</h3>
+
+<h4>
+    <a href="/blog/article/add"> Create an Article </a>
+</h4>
 {% endblock content %}

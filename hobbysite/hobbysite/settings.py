@@ -14,6 +14,9 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -124,6 +127,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR/'static',]
+LOGIN_REDIRECT_URL = 'landing_page'
+LOGOUT_REDIRECT_URL = '/profile/login'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR/'media'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

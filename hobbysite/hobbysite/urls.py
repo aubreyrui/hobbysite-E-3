@@ -16,16 +16,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+from django.views.generic import TemplateView
 
 urlpatterns = [
+    path('', TemplateView.as_view(template_name = 'base.html'), name='landing_page'),
     path('admin/', admin.site.urls),
     path('blog/', include('blog.urls', namespace = 'blog')),
     path('', include('wiki.urls', namespace = 'wiki')),
-    path('', include('commissions.urls', namespace='commissions')),
-<<<<<<< HEAD
-    path('merchstore/', include('merchstore.urls', namespace='merchstore')),
-=======
-    path('merch/', include('merchstore.urls', namespace='merchstore')),
->>>>>>> 94c71c04d2f3762380d36f8551728a3504fe181e
-    path('',include('user_management.urls', namespace ="user_management"))
+    path('', include('commissions.urls', namespace= 'commissions')),
+    path('merchstore/', include('merchstore.urls', namespace= 'merchstore')),
+    path('profile/',include('django.contrib.auth.urls')),
+    path('profile/', include('user_management.urls', namespace= 'user_management'))
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
