@@ -23,7 +23,7 @@
 <h3>
     {% for comment in comments %}
         {% if comment.article == article %}
-            {{ comment.created_on }} by {{ comment.comment_author }}
+            {{ comment.created_on }} || {{ comment.comment_author }}
             <p>
                 {{ comment.entry }}
             </p>
