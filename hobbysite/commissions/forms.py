@@ -12,11 +12,11 @@ class CommissionForm(forms.ModelForm):
 class JobForm(forms.ModelForm):
     class Meta:
         model = Job
-        fields = "__all__"
+        fields = ['role', 'manpower_required', 'status']
 
 
 JobFormSet = forms.inlineformset_factory(
-    Commission, Job, form=JobForm, extra=1 # https://docs.djangoproject.com/en/5.0/topics/forms/formsets/
+    Commission, Job, form=JobForm, extra=1, can_delete=False # https://docs.djangoproject.com/en/5.0/topics/forms/formsets/
 )
 
 class JobApplicationForm(forms.ModelForm):

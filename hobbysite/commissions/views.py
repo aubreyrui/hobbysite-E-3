@@ -1,6 +1,6 @@
 from contextlib import redirect_stderr
 from typing import Any
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
@@ -47,12 +47,12 @@ class CommissionsDetailView(DetailView):
     template_name = 'commissions_detail.html'
 
     def post(self, request, *args, **kwargs):
-        job_id = request.POST.get('job_id')
-        job = JobApplication()
-        accepted_applicants = job.objects.filter(status='Accepted').count()
+        application_id = request.POST.get('application_id')
+        job = get_object_or_404(Job, pk=application_id) # https://stackoverflow.com/questions/17813919/django-error-matching-query-does-not-exist
+        accepted_applicants = JobApplication.objects.filter(status='Accepted').count()
         if accepted_applicants < job.manpower_required + 1:
-            JobApplication.objects.create(job=job, applicant=request.user.profile)
-            job.jobapplication_set.create(applicant=request.user.profile, status='Accepted')
+            JobApplication.objects.create(job=JobApplication, applicant=request.user.profile)
+            JobApplication.jobapplication_set.create(applicant=request.user.profile, status='Accepted')
             return redirect('commissions:commission', pk=self.kwargs['pk'])
         else:
             pass
@@ -123,35 +123,34 @@ class CommissionsCreateView(LoginRequiredMixin, CreateView):
 class CommissionsJobCreateView(LoginRequiredMixin, CreateView):
     model = Commission
     template_name = 'commissions_create.html'
+    fields = ['title', 'description', 'status', 'people_required']
 
-    # def form_valid(self, form):
-    #     form.instance.author = self.request.user.profile
-    #     return super().form_valid(form)
-
-    # def get_success_url(self):
-    #     return reverse_lazy("commissions:list")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['commission_form'] = CommissionForm()
-        context['job_form'] = JobForm()
+        if self.request.POST:
+            context['commission_form'] = CommissionForm(self.request.POST)
+            context['job_formset'] = JobFormSet(self.request.POST)
+        else:
+            context['commission_form'] = CommissionForm()
+            context['job_formset'] = JobFormSet()
         return context
 
 
     def form_valid(self, form):
+        commission = form.save(commit=False) # create commission object but does not save
+        commission.author = self.request.user.profile
+        commission.save()
         context = self.get_context_data()
-        job_formset = context['job']
+        job_formset = context['job_formset']
         if job_formset.is_valid():
             self.object = form.save()
             job_formset.instance = self.object
             job_formset.save()
-            return super().form_valid(form)
         else:
             return self.render_to_response(self.get_context_data(form=form))
+        return super().form_valid(form)
        
-    
-    
-
 
 class CommissionsUpdateView(LoginRequiredMixin, UserPassesTestMixin,UpdateView):
     model = Commission
