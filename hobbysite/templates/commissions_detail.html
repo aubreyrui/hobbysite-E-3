@@ -25,7 +25,8 @@
         <h2>Jobs Needed</h2>
         {% for job in commission.commissions.all %}
         <p>Role: {{ job.role }} - Status: {{ job.get_status_display }}</p>
-        <p>Manpower Required for {{ job.role }}: {{job.manpower_required}}</p>
+        <p>Manpower Required for {{ job.role }}: {{ job.manpower_required }}</p>
+        <p>Open Slots for {{ job.role }}: {{ open_manpower }}</p>
         {% endfor %}
 
         {% if request.user.is_authenticated%}
