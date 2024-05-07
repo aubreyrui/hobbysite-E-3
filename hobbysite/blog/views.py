@@ -4,7 +4,7 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView
 from django.views.generic.edit import UpdateView
-from django.db.models import Q
+
 
 from .models import Article, ArticleCategory, Comment
 from .forms import ArticleCreateForms, ArticleUpdateForms, CommentForms
@@ -28,8 +28,6 @@ class ArticleDetailView(DetailView):
         form = CommentForms(request.POST)
         
         if form.is_valid():
-            # insert Task Creation
-            
             return self.get(request, *args, **kwargs)
         else:
             self.object_list = self.get_queryset()

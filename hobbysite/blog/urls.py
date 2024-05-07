@@ -8,4 +8,6 @@ urlpatterns = [
     path('article/<int:pk>/edit', ArticleUpdateView.as_view(), name = 'blog_edit')
 ]
 
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 app_name = 'blog'
