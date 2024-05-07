@@ -31,7 +31,7 @@ class Commission(models.Model):
     
     def __str__(self):
         return self.title
-    
+
     def get_absolute_url(self):
         return reverse("commissions:commissions_detail", args=str(self.pk))
 
@@ -60,6 +60,10 @@ class Job(models.Model):
         return str(self.commission)
     
 
+    def getManpowerRequired():
+        return Job.manpower_required
+    
+
 class JobApplication(models.Model):
 
     class StatusChoices(models.IntegerChoices):
@@ -78,4 +82,11 @@ class JobApplication(models.Model):
     applied_on = models.DateField(null = False, auto_now_add = True)
 	
     class Meta:
-        ordering = ['status', '-applied_on'] # add priority for status
+        ordering = ['status', '-applied_on']
+
+    
+    # def manpower_validation(self):
+    #     if (self.job.status.ACCEPTED == self.job.manpower_required):
+    #         return "You cannot apply to this job anymore."
+    #     else:
+    #         return "You can apply."

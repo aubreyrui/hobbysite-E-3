@@ -22,6 +22,10 @@
             </div>
             <div class="commission-applied">
                 <h2> List of Commissions {{ request.user.profile }} Applied To </h2>
+                {% if job_application.applicant == request.user.profile %}
+                <p style="margin-top: +20px;"><a href="{{commission.get_absolute_url}}">
+                    {{ commission.title }}</a>  by {{ commission.author }} - {{ commission.people_required }} Available Slots </p>
+                {% endif %}
             </div>
         {% endif %}
     {% endfor %}

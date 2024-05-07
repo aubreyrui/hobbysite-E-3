@@ -26,6 +26,7 @@ urlpatterns = [
     path('', include('wiki.urls', namespace = 'wiki')),
     path('', include('commissions.urls', namespace='commissions')),
     path('merchstore/', include('merchstore.urls', namespace='merchstore')),
-    path('profile/',include('django.contrib.auth.urls')),
-    path('profile/', include('user_management.urls', namespace='user_management')),
+    path('', include('user_management.urls', namespace='user_management')),
+    path('profile/', include('django.contrib.auth.urls')),
+    #path('profile/', include('user_management.urls', namespace='user_management')),
 ]
