@@ -1,4 +1,4 @@
-{% extends "merch_base.html" %}
+{% extends "base.html" %}
 
 {% load static %}
 
@@ -8,8 +8,11 @@ Merch List
 
 {% block content %}
 <h2> Merch List</h2>
-<ul>
-</ul>
+{% if request.user.is_authenticated %}
+
+<p><a href="{% url 'merchstore:product_create' %}">Create Product</a></p>
+
+{% endif %}
 <ul>
     {% for product in object_list %}
     <li><a href="{{ product.get_absolute_url }}">[{{ product.producttype }}] {{ product.name }}</a></li>

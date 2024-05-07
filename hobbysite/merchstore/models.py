@@ -30,7 +30,7 @@ class Product(models.Model):
     description = models.TextField()
     producttype = models.ForeignKey(ProductType, null=True, on_delete=models.SET_NULL, related_name = 'products')
     price = models.DecimalField(max_digits = 10, decimal_places = 2)
-    owner = models.ForeignKey(Profile, null=True, on_delete=models.CASCADE)
+    owner = models.ForeignKey(Profile, null=False, on_delete=models.CASCADE)
     stock = models.IntegerField(default=0,
         validators=[
             MinValueValidator(0, "Number of stock should be nonnegative!")

@@ -19,7 +19,7 @@ class ProductDetailView(DetailView):
 
 class ProductCreateView(CreateView, LoginRequiredMixin):
     model = Product
-    tempalte_name = 'merch_create.html'
+    template_name = 'merch_create.html'
     form_class = CreateProductForm
 
     def form_valid(self, form):
@@ -28,7 +28,7 @@ class ProductCreateView(CreateView, LoginRequiredMixin):
 
 class ProductUpdateView(UpdateView, LoginRequiredMixin):
     model = Product
-    tempalte_name = 'merch_update.html'
+    template_name = 'merch_update.html'
     form_class = CreateProductForm
 
     def form_valid(self, form):

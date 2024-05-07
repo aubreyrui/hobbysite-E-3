@@ -1,4 +1,4 @@
-{% extends "merch_base.html" %}
+{% extends "base.html" %}
 
 {% load static %}
 
@@ -22,7 +22,7 @@
 
 {% if request.user.is_authenticated %}
 <!-- Dealing with Login Users-->
-{% if request.user.username is product.owner %}
+{% if request.user is product.owner %}
 
 <h3><a href="{% url 'merchstore:product_update' pk=product.pk %}">Update Product</a></h3>
 
@@ -31,7 +31,7 @@
 <form method="post">
     {% csrf_token %}
     {{ form }}
-    <button type="submit">Submit</button>
+    <button type="submit" {% if product.stock is 0 %}disabled{% endif %}>Submit</button>
 </form>
 
 {% endif %}
@@ -42,7 +42,7 @@
 <form method="post">
     {% csrf_token %}
     {{ form }}
-    <button type="submit">Submit</button>
+    <button type="submit" {% if product.stock is 0 %}disabled{% endif %}>Submit</button>
 </form>
 
 {% endif %}
