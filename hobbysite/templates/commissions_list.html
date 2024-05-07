@@ -13,23 +13,30 @@
     }
 </style>
 <body>
-    {% if request.user.is_authenticated %}
-        <div class="commission-created">
-            <h2> List of Commissions Created by {{ request.user.profile }} </h2>
-        </div>
-        <div class="commission-applied">
-            <h2> List of Commissions {{ request.user.profile }} Applied To </h2>
-        </div>
-    {% endif %}
+    {% for commission in object_list %}
+        {% if commission.author == request.user.profile %}
+            <div class="commission-created">
+                <h2> List of Commissions Created by {{ request.user.profile }} </h2>
+                <p style="margin-top: +20px;"><a href="{{commission.get_absolute_url}}">
+                    {{ commission.title }}</a>  by {{ commission.author }} - {{ commission.people_required }} Available Slots </p>
+            </div>
+            <div class="commission-applied">
+                <h2> List of Commissions {{ request.user.profile }} Applied To </h2>
+            </div>
+        {% endif %}
+    {% endfor %}
     <div class="commission-container">
         <h2> List of Current Available Commissions </h2>
         {% for commission in object_list %}
-            <p style="margin-top: +20px;"><a href="{{commission.get_absolute_url}}">
-                {{ commission.title }}</a>  - {{ commission.people_required }} Available Slots </p>
-            <p> Status: {{ commission.get_status_display }} </p>
-            <p> created on: {{ commission.created_on }}</p>
-            <p> updated on: {{ commission.updated_on }}</p>
-            {% endfor %}
+            {% if commission.author != request.user.profile %}
+                <p style="margin-top: +20px;"><a href="{{commission.get_absolute_url}}">
+                    {{ commission.title }}</a>  by {{ commission.author }} - {{ commission.people_required }} Available Slots </p>
+                <p> Status: {{ commission.get_status_display }} </p>
+                <p> created on: {{ commission.created_on }}</p>
+                <p> updated on: {{ commission.updated_on }}</p>
+            {% endif %}
+        {% endfor %}
+        
         <a href="/commissions/add">Create a Commission</a>
     </div>
 </body>

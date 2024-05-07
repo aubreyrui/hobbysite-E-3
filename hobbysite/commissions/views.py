@@ -8,9 +8,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Commission, JobApplication
 from .forms import CommissionForm, JobApplicationForm 
 
-def commissions_list(request):
+def commissions_list(request):    
     commissions = Commission.objects.all()
-    ctx = {"commissions": commissions}
+    job_applicants = JobApplication.objects.all()
+    ctx = {
+        "commissions": commissions,
+        "job_applicants": job_applicants
+           }
     return render(request, "commissions_list.html", ctx)
 
 

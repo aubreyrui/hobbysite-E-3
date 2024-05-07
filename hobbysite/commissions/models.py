@@ -14,6 +14,7 @@ class Commission(models.Model):
 
     
     title = models.CharField(max_length = 255)
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='author')
     description = models.TextField(null = False)
     status = models.PositiveSmallIntegerField(
         choices = StatusChoices.choices,
@@ -68,7 +69,7 @@ class JobApplication(models.Model):
 
 	
     job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='job')
-    applicant = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile')
+    applicant = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='applicant')
     status = models.CharField(
         max_length = 8,
 		choices = StatusChoices.choices,
