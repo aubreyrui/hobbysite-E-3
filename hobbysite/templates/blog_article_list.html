@@ -2,12 +2,13 @@
 {% load static %}
 {% block title %}Blog{% endblock title %}
 {% block content %}
+
 <h1>
     Article List
 </h1>
 
 <h2>
-    Your Articles
+    Your Article/s:
     {% for articlecateg in object_list %}
         {% for article in articlecategory.article.all %}
             {% if article.article_author == request.user.profile %}
@@ -22,7 +23,7 @@
 </h2>
 
 <h3>
-    All Articles
+    All Articles"
     {% for articlecategory in object_list %}
         <p>{{ articlecategory.name }}</p>
         <p>{{ articlecategory.description }}</p>

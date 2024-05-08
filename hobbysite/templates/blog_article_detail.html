@@ -2,13 +2,14 @@
 {% load static %}
 {% block title %} {{ article.title }} {% endblock title %}
 {% block content %}
+
 <h1>
     {{ article.title }}
 </h1>
 
 <h2>
     {% if article.article_author == request.user.profile %}     <!--editable when article owner is logged in-->
-        <a href = "/blog/article/{{ article.pk }}/edit"> Edit my Article</a>
+        <a href = "/blog/article/{{ article.pk }}/edit"> Edit my Article </a>
     {% endif %} 
 
     {% if request.user.is_authenticated %}
@@ -39,7 +40,7 @@
     {% for related_article in articles %} 
         {% if related_article.category == article.category %}
             {%if related_article != article %}
-                 <li><a href="{{ related_article.get_absolute_url }}">
+                <li><a href="{{ related_article.get_absolute_url }}">
                     {{ related_article.title }}
                 </a></li>
             {% endif %}
