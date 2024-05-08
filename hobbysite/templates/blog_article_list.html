@@ -3,6 +3,30 @@
 {% block title %}Blog{% endblock title %}
 {% block content %}
 
+<body style="background-color:mistyrose;">
+<style>
+    h3 {
+        font-family: 'Lucida Console'; 
+        font-weight:100; 
+        text-align: center;
+    }
+    h4 {
+        font-family: 'Courier New'; 
+        font-weight:100; 
+        text-align: center;
+    }
+    h3.header{
+        padding: 5px; 
+        margin: 10px auto;
+        border: 3px solid;
+        border-radius: 10px; 
+        background-color: azure; 
+        text-align: center; 
+        width: 150px;
+
+    }
+</style>
+
 <h1>
     Article List
 </h1>
@@ -22,9 +46,10 @@
 
 <h3>
     All Articles:
+</h3>
+
+<h4>
     {% for article in object_list %}
-        <p>{{ article.title }}</p>
-        <p>{{ article.description }}</p>
         {% if article_author != request.user.profile %}
             <li>
                 <a href="{{ article.get_absolute_url }}">
@@ -32,10 +57,13 @@
                 </a>
             </li>
         {% endif %}
+        <p>{{ article.description }}</p>
     {% endfor %}
-</h3> <br>
+</h4> <br>
 
-<h4>
-    <a href="/blog/article/add"> Create an Article </a>
-</h4>
+<h5>
+    <center>   
+        <a href="/blog/article/add"> Create an Article </a>
+    </center>
+</h5>
 {% endblock content %}
