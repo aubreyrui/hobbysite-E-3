@@ -10,7 +10,7 @@
 
 {% if request.user.is_authenticated %}
 
-<p>Logged in User: {{ request.user.username }} </p>
+<p>Logged in User: {{ request.user.username }} | {{ request.user.profile }} </p>
 
 {% else %}
 
@@ -49,7 +49,8 @@
 
 {% endblock content %}
 
-{% block form %}
-{% endblock form %}
 {% block scripts %}
 {% endblock scripts %}
+
+{% block form %}
+{% endblock form %}

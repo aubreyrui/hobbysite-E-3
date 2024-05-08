@@ -6,9 +6,6 @@
 Merch Transaction
 {% endblock title %}
 
-{% block form %}
-{% endblock form %}
-
 {% block content %}
 
 <h3><p>{{ request.user.username }}'s  Product's Transaction </p>
@@ -19,17 +16,18 @@ Merch Transaction
 {% if buyer != request.user.profile %}
     <h2>{{ buyer }}</h2>
 {% endif %}
-<ul>
-{% for transact in object_list %}
-    {% if transact.buyer is buyer %}
-    <li>
-        {{ transact }}
-    </li>
+    <ul>
+    {% for transact in object_list %}
+    {% if transact.product.owner is not buyer %}
+    <ul>
+        <li>
+            {{ transact }}
+        </li>
+    </ul>
     {% endif %}
-{% endfor %}
+    {% endfor %}
 </ul>
 {% endfor %}
-
 {% endblock content %}
 {% block scripts %}
 {% endblock scripts %}

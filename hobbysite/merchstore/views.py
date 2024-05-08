@@ -14,6 +14,12 @@ class ProductListView(ListView):
     model = Product
     template_name = 'merch_product_list.html'
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        type = ProductType.objects.all()
+        ctx["product_type"] = type
+        return ctx
+
 class ProductDetailView(DetailView):
     model = Product
     template_name = 'merch_product_detail.html'
@@ -35,7 +41,7 @@ class ProductDetailView(DetailView):
                 transact = Transaction()
                 transact.product = product
                 transact.amount = form.cleaned_data["amount"]
-                transact.buyer = Profile.objects.get(id=request.POST.get('buyer'))
+                transact.buyer = request.user.profile                
                 product.stock -= form.cleaned_data["amount"]
                 product.save()
                 transact.save()

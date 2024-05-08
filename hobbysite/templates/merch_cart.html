@@ -18,7 +18,7 @@ Merch Cart
         {% endif %}
         <ul>
         {% for transact in object_list %}
-            {% if transact.product.owner is seller %}
+            {% if transact.product.owner is not seller %}
             <li>
                 {{ transact }}
             </li>
@@ -28,7 +28,7 @@ Merch Cart
     {% endfor %}
 {% endblock content %}
 
-{% block form %}
-{% endblock form %}
 {% block scripts %}
 {% endblock scripts %}
+{% block form %}
+{% endblock form %}

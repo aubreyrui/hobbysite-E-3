@@ -12,7 +12,7 @@ Merch List
 {% if request.user.is_authenticated %}
 
 <p><a href="{% url 'merchstore:product_create' %}">Create Product</a></p>
-<p>Logged in User: {{ request.user.username }} </p>
+<p>Logged in User: {{ request.user.username }} | {{ request.user.profile }} </p>
 
 {% else %}
 
@@ -22,18 +22,39 @@ Merch List
 <p><a href="{% url 'merchstore:product_transaction' %}">Your Product Transactions</a></p>
 <p><a href="{% url 'merchstore:product_cart' %}">Your Cart</a></p>
 
-<ul>
-    {% for product in object_list %}
-    <li><a href="{{ product.get_absolute_url }}">[{{ product.producttype }}] {{ product.name }}</a></li>
-    <ul>
-        <li>{{ product.owner }}</li>
-    </ul>
-    {% endfor %}
-</ul>
+{% if request.user.is_authenticated %}
+        <h1>Your Created Products</h1>
+        <ul>
+            {% for product in object_list %}
+                    {% if product.owner == request.user.profile %}
+                        <li>
+                            <p><a href="{{ product.get_absolute_url }}">[{{product.producttype}}] {{ product.name }} by {{ product.owner }}</a></p>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+        </ul>
 
+        <h1>Other Products</h1>
+            <ul>
+                {% for product in object_list %}
+                    {% if product.owner != request.user.profile %}
+                        <li>
+                            <p><a href="{{ product.get_absolute_url }}">[{{product.producttype}}] {{ product.name }} by {{ product.owner }}</a></p>
+                        </li>
+                    {% endif %}
+                    {% endfor %}
+            </ul>
+    {% else %}
+        <h1>Products</h1>
+            {% for product in object_list %}
+            <ul>
+                <li>
+                    <p><a href="{{ product.get_absolute_url }}">[{{product.producttype}}] {{ product.name }} by {{ product.owner }}</a></p>
+                </li>
+            {% endfor %}
+            </ul>
+    {% endif %}
 {% endblock content %}
 
-{% block form %}
-{% endblock form %}
 {% block scripts %}
 {% endblock scripts %}

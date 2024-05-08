@@ -52,11 +52,11 @@ class Product(models.Model):
         ordering = ['name']
 
 class Transaction(models.Model):
-    CART = "CRT"
-    PAY = "PAY"
-    SHIP = "SHIP"
-    RECEIVE = "RECEIVE"
-    DELIVER = "DELIVER"
+    CART = "On Cart"
+    PAY = "To Pay"
+    SHIP = "To Ship"
+    RECEIVE = "To Receive"
+    DELIVER = "Delivered"
 
     TransactionChoices = {
         CART: "On Cart",
@@ -76,7 +76,7 @@ class Transaction(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.amount} | {self.product} - {self.status}"
+        return f"{self.product.name} - {self.amount} | {self.status}"
     
     def get_absolute_url(self):
-        return reverse('merchstore:transaction_detail', kwargs={"pk": self.pk})
+        return reverse('merchstore:product_transaction', kwargs={"pk": self.pk})
