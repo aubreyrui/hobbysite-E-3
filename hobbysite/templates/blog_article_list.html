@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'blog_base.html' %}
 {% load static %}
 {% block title %}Blog{% endblock title %}
 {% block content %}
@@ -23,7 +23,7 @@
 </h2>
 
 <h3>
-    All Articles"
+    All Articles:
     {% for articlecategory in object_list %}
         <p>{{ articlecategory.name }}</p>
         <p>{{ articlecategory.description }}</p>
