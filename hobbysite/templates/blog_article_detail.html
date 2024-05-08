@@ -3,22 +3,18 @@
 {% block title %} {{ article.title }} {% endblock title %}
 {% block content %}
 
+<div>
+    <img src = "{{ article.header_image.url }}" alt = "{{ article.title }}">
+</div>
+
 <h1>
     {{ article.title }}
 </h1>
 
 <h2>
-    {% if article.article_author == request.user.profile %}     <!--editable when article owner is logged in-->
-        <a href = "/blog/article/{{ article.pk }}/edit"> Edit my Article </a>
-    {% endif %} 
-
-    {% if request.user.is_authenticated %}
-    <form method = "POST">
-        {% csrf_token %}
-        {{ form.as_div }}
-        <button type="submit">Add Comment</button>
-    </form>
-        {% endif %}
+    <a href="/blog/articles">
+        Go back to Article List
+    </a>
 </h2>
 
 <h3>
@@ -48,15 +44,24 @@
     {% endfor %}
 </h5>
 
-<h6>
-    <a href="/blog/articles">
-        Go back to Article List
-    </a>
-</h6>
 
 <p> Created on: {{ article.created_on }} </p>
 <p> Updated last: {{ article.updated_on }} </p> 
 <p> Category: {{ article.category }} </p> <br>
 <p> Description: {{ article.description }} </p> <br>
 <p> Blog Proper: <br> {{ article.entry|linebreaks }} </p>
+
+<h6>
+    {% if article.article_author == request.user.profile %}     <!--editable when article owner is logged in-->
+        <a href = "/blog/article/{{ article.pk }}/edit"> Edit my Article </a>
+    {% endif %} 
+
+    {% if request.user.is_authenticated %}
+    <form method = "POST">
+        {% csrf_token %}
+        {{ form.as_div }}
+        <button type="submit">Add Comment</button>
+    </form>
+        {% endif %}
+</h6>
 {% endblock content %}

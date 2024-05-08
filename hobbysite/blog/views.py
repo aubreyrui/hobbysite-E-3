@@ -19,9 +19,17 @@ class ArticleDetailView(DetailView):
     model = Article
     template_name = 'blog_article_detail.html'
     
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data
+    #     context['form'] = CommentForms()
+    #     return context
+    
     def get_context_data(self, **kwargs):
-        context = super().get_context_data
+        context = super().get_context_data(**kwargs)
         context['form'] = CommentForms()
+        context['comments'] = Comment.objects.all()
+        context['articles'] = Article.objects.all()
+        context['header_image'] = Article.header_image
         return context
 
     def post(self, request, *args, **kwargs):
@@ -40,7 +48,22 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
     template_name = "blog_article_create.html"
 
+    form_class = ArticleCreateForms
+
+    def form_valid(self, form):
+        form.instance.article_author = self.request.user.profile
+        return super().form_valid(form)
+
 
 class ArticleUpdateView(LoginRequiredMixin, UpdateView):
     model = Article
     template_name = "blog_article_update.html"
+
+    form_class = ArticleUpdateForms
+
+    def form_valid(self, form):
+        article = self.get_object() 
+        form.instance.article = article
+        self.object = form.save(commit=False)
+        self.object.save()
+        return super().form_valid(form)
