@@ -4,9 +4,10 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView
 from django.views.generic.edit import UpdateView
+from django.http import HttpResponseRedirect
 
 
-from .models import Article, ArticleCategory, Comment
+from .models import Article, ArticleCategory, Comment, Profile
 from .forms import ArticleCreateForms, ArticleUpdateForms, CommentForms
 
 
@@ -29,28 +30,26 @@ class ArticleDetailView(DetailView):
     model = Article
     template_name = 'blog_article_detail.html'
     
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data
-    #     context['form'] = CommentForms()
-    #     return context
-    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = CommentForms()
-        context['comments'] = Comment.objects.all()
-        context['articles'] = Article.objects.all()
-        context['header_image'] = Article.header_image
+        context["article_category"] = ArticleCategory.objects.all()
+        context["comments"] = Comment.objects.all()
+        context["form"] = CommentForms()
         return context
 
     def post(self, request, *args, **kwargs):
         form = CommentForms(request.POST)
-        
         if form.is_valid():
-            return self.get(request, *args, **kwargs)
-        else:
-            self.object_list = self.get_queryset()
+            comment = Comment()
+            comment.author = Profile.objects.get(user = self.request.user)
+            comment.article = self.get_object()
+            comment.entry = form.cleaned_data.get('entry')
+            comment.save()
+            return HttpResponseRedirect(request.path)
+        else: 
+            self.object_list = self.get_queryset(**kwargs)
             context = self.get_context_data(**kwargs)
-            context['form'] = form
+            context["form"] = form 
             return self.render_to_response(context)
 
 
