@@ -26,10 +26,10 @@ class Product(models.Model):
     description = models.TextField()
     producttype = models.ForeignKey(ProductType, null=True, on_delete=models.SET_NULL, related_name = 'products')
     price = models.DecimalField(max_digits = 10, decimal_places = 2)
-    owner = models.ForeignKey(Profile, null=False, on_delete=models.CASCADE)
+    owner = models.ForeignKey(Profile, null=False, on_delete=models.CASCADE, related_name="products")
     stock = models.IntegerField(default=0,
         validators=[
-            MinValueValidator(1, "Number of stock should be nonnegative!")
+            MinValueValidator(0, "Number of stock should be nonnegative!")
         ]
     )
     status = models.CharField(max_length=255, choices=statuschoice)
@@ -37,11 +37,13 @@ class Product(models.Model):
     def __str__(self):
         return self.name
     
-    def status(self):
+    def save(self):
         if self.stock <= 0:
             self.status = "Out of Stock"
         else:
             self.status = "Available"
+
+        return super().save()
 
     def get_absolute_url(self):
         return reverse('merchstore:product_detail', args=str(self.pk))
@@ -63,21 +65,18 @@ class Transaction(models.Model):
         RECEIVE: "To Receive",
         DELIVER: "Delivered"
     }
-    buyer = models.ForeignKey(Profile, null=True, on_delete=models.SET_NULL) #add the profile (will determine this soon)
+    buyer = models.ForeignKey(Profile, null=True, on_delete=models.SET_NULL) 
     product = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL)
     amount = models.IntegerField(
         validators=[   
-            MinValueValidator(1, "Amount should not be empty!") # to make sure that the buyer does not send the empty transaction form
+            MinValueValidator(0, "Amount should not be empty!") # to make sure that the buyer does not send the empty transaction form
         ]
     )
-    status = models.CharField(max_length=255, choices=TransactionChoices)
+    status = models.CharField(max_length=64, choices=TransactionChoices)
     created_on = models.DateTimeField(auto_now_add=True)
 
-    def get_absolute_url(self):
-        return reverse('merchstore:transaction_detail', args=str(self.pk))
-    
-    def total(self):
-        return float(self.product.price*self.amount)
-    
     def __str__(self):
-        return f"{self.product} ({self.amount}) - {self.status} | Php {self.total}"
+        return f"{self.amount} | {self.product} - {self.status}"
+    
+    def get_absolute_url(self):
+        return reverse('merchstore:transaction_detail', kwargs={"pk": self.pk})

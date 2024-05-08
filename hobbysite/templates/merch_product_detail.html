@@ -21,8 +21,8 @@
 <h2>{{ product.name }}</h2>
 <ul>
     <li><h3>Price: {{ product.price }}</h3></li>
-    <li><h3>Stock: {{ product.stock }}</h3></li>
-    <li><h3>{{ product.status }}</h3></li>
+    <li><h3>Stock: {{ object.stock }}</h3></li>
+    <li><h3>{{ object.status }}</h3></li>
     <li>
         <p>
             <b>Product type: {{ product.producttype }}</b> <br> {{ product.producttype.description }}
@@ -38,22 +38,14 @@
 
 {% endif %}
 
-<form method="post">
+<form method="post" action="">
     {% csrf_token %}
     {{ form }}
-    <input type="submit" value="purchase" {% if request.user.profile == product.owner or product.stock is 0 %}disabled{% endif %}>
+    <input type="submit" value="buy" {% if request.user.profile == product.owner or product.stock is 0 %}disabled{% endif %}>
 </form>
 
 
 <p><a href="/merchstore/items">Return to List</a></p>
-
-
-<!--If the Transaction form has all the necessary details 
-    and is saved,  the user will be redirected according to the login status. 
-    If the user is authenticated, then they will be redirected to the CartView. 
-    Otherwise, they will be redirected to the login page. 
-    Once logged-in, only then can the transaction be saved.
--->
 
 {% endblock content %}
 

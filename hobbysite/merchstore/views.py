@@ -16,11 +16,6 @@ class ProductListView(ListView):
     model = Product
     template_name = 'merch_product_list.html'
 
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx['product_types'] = ProductType.objects.all()
-        return ctx
-
 class ProductDetailView(DetailView):
     model = Product
     template_name = 'merch_product_detail.html'
@@ -39,27 +34,33 @@ class ProductDetailView(DetailView):
         product = self.get_object()
         if form.is_valid():
             if request.user.is_authenticated:
-                transact = Transaction()
-                transact.product = product
-                transact.amount = form.cleaned_data["amount"]
-                transact.buyer = request.user.profile
-                transact.save() # posts the transaction
+                transaction = Transaction()
+                transaction.product = product
+                transaction.amount = form.cleaned_data["amount"]
+                transaction.buyer = request.user.profile
+                transaction.save()
                 product.stock -= form.cleaned_data["amount"]
                 return redirect("merchstore:product_cart")
             else:
                 return redirect_to_login(next=request.get_full_path())
-            
         else:
-            # repeating the process again
             self.object_list = self.get_queryset(**kwargs)
-            ctx = self.get_context_data(**kwargs)
-            ctx['form'] = form 
-            return self.render_to_response(ctx)
-
+            context = self.get_context_data(**kwargs)
+            context["form"] = form
+            return self.render_to_response(context)
+        
 class ProductCreateView(CreateView, LoginRequiredMixin):
     model = Product
     template_name = 'merch_create.html'
     form_class = CreateProductForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        form = context["form"]
+        form.fields["owner"].initial = Profile.objects.get(user=self.request.user)
+        form.fields["owner"].disabled = True
+        context["form"] = form
+        return context
 
     def form_valid(self, form):
         form.instance.owner = self.request.user.profile
@@ -86,8 +87,18 @@ class ProductCartList(ListView, LoginRequiredMixin):
     model = Transaction
     template_name = 'merch_cart.html'
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["owners"] = Profile.objects.all()
+        return ctx
+
 class ProductTransactionList(ListView, LoginRequiredMixin):
     model = Transaction
     template_name = 'merch_transaction.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["buyers"] = Profile.objects.all()
+        return ctx
 
 # Create your views here.
