@@ -28,7 +28,6 @@ class ProductAdmin(admin.ModelAdmin):
 
 class TransactionAdmin(admin.ModelAdmin):
     model = Transaction
-    list_display = ['buyer',]
     ordering = ['buyer',]
 
 

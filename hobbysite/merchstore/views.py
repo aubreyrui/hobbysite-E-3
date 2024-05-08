@@ -1,5 +1,3 @@
-from django.http import HttpRequest
-from django.http.response import HttpResponse as HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic.list import ListView
@@ -34,12 +32,13 @@ class ProductDetailView(DetailView):
         product = self.get_object()
         if form.is_valid():
             if request.user.is_authenticated:
-                transaction = Transaction()
-                transaction.product = product
-                transaction.amount = form.cleaned_data["amount"]
-                transaction.buyer = request.user.profile
-                transaction.save()
+                transact = Transaction()
+                transact.product = product
+                transact.amount = form.cleaned_data["amount"]
+                transact.buyer = Profile.objects.get(id=request.POST.get('buyer'))
                 product.stock -= form.cleaned_data["amount"]
+                product.save()
+                transact.save()
                 return redirect("merchstore:product_cart")
             else:
                 return redirect_to_login(next=request.get_full_path())
@@ -55,12 +54,12 @@ class ProductCreateView(CreateView, LoginRequiredMixin):
     form_class = CreateProductForm
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        form = context["form"]
+        ctx = super().get_context_data(**kwargs)
+        form = ctx["form"]
         form.fields["owner"].initial = Profile.objects.get(user=self.request.user)
         form.fields["owner"].disabled = True
-        context["form"] = form
-        return context
+        ctx["form"] = form
+        return ctx
 
     def form_valid(self, form):
         form.instance.owner = self.request.user.profile
