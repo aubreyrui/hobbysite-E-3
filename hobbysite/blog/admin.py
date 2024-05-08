@@ -8,7 +8,6 @@ class CommentAdmin(admin.ModelAdmin):
 
 class ArticleAdmin(admin.ModelAdmin):
     model = Article
-    inlines = [CommentAdmin]
     
 
 class ArticleInLine(admin.TabularInline):
@@ -17,7 +16,6 @@ class ArticleInLine(admin.TabularInline):
      
 class ArticleCategoryAdmin(admin.ModelAdmin):
     model = ArticleCategory
-    inlines = [ArticleInLine]
     
 
 admin.site.register(Article, ArticleAdmin)
