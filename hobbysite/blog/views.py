@@ -13,6 +13,16 @@ from .forms import ArticleCreateForms, ArticleUpdateForms, CommentForms
 class ArticleListView(ListView):
     model = Article
     template_name = 'blog_article_list.html'
+    
+class ArticleList(ListView):
+    model = Article
+    context_object_name = "articles"
+    template_name = "wiki/article_list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["article_category"] = ArticleCategory.objects.all()
+        return context
 
 
 class ArticleDetailView(DetailView):

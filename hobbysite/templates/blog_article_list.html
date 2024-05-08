@@ -9,7 +9,7 @@
 
 <h2>
     Your Article/s:
-    {% for articlecateg in object_list %}
+    {% for category in object_list %}
         {% for article in articlecategory.article.all %}
             {% if article.article_author == request.user.profile %}
                 <li>

@@ -5,7 +5,7 @@ from user_management.models import Profile
 
 class ArticleCategory(models.Model):
     name = models.CharField(max_length = 255)
-    description = models.TextField()
+    description = models.TextField(null = True, blank = True)
 
 
     class Meta:
@@ -40,7 +40,7 @@ class Article(models.Model):
 
 class Comment(models.Model):
     comment_author = models.ForeignKey(Profile, null=True, on_delete=models.SET_NULL, related_name='comment_author')
-    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comment_article')
     entry = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)    
@@ -50,4 +50,4 @@ class Comment(models.Model):
         ordering = ['created_on']
         
     def __str__(self):
-        return self.entry
+        return f"Comment by {self.author} on {self.article.title}"
