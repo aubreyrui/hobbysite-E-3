@@ -51,12 +51,13 @@ class CommissionsListView(ListView):
 class CommissionsDetailView(DetailView):
     model = Commission
     template_name = 'commissions_detail.html'
-    form_class = JobApplicationForm
+    form_class = JobApplicationForm()
 
     def get_context_data(self, **kwargs):
         self.object = self.get_object()
         context = super(CommissionsDetailView, self).get_context_data(**kwargs)
         total_manpower_required = Job.objects.aggregate(total_manpower=Sum('manpower_required'))['total_manpower'] or 0
+        print(total_manpower_required)
         total_signees = JobApplication.objects.filter(status='Accepted').count()
         open_manpower = max(total_manpower_required - total_signees, 0)
         context['total_manpower_required'] = total_manpower_required
@@ -68,12 +69,11 @@ class CommissionsDetailView(DetailView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object() # gets the Commission object
         job_application_form = JobApplicationForm(request.POST)
+        job_application_form.fields['job'].queryset = Job.objects.filter(commission=self.object)
         if job_application_form.is_valid():
             job_application = job_application_form.save(commit=False) # create commission object but does not save
             job_application.commission = self.object
-            print(job_application.commission)
             job_application.applicant = self.request.user.profile
-            print(job_application.job)
             job_application.save()
             return redirect('commissions:commissions')
         else:
