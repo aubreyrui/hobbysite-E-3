@@ -57,7 +57,7 @@ class Job(models.Model):
 
         
     def __str__(self):
-        return str(self.commission)
+        return str(self.role)
     
 
     def getManpowerRequired():

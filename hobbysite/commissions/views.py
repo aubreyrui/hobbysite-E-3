@@ -24,7 +24,11 @@ def commissions_list(request):
 
 def commissions_detail(self, request, pk):
     commission = Commission.objects.get(pk=pk)
-    ctx = {"commission": commission}
+    job_applications = JobApplication.objects.all()
+    ctx = {
+        "commission": commission,
+        "job_application": job_applications
+           }
     return render(request, "commission_detail.html", ctx)
 
 
@@ -49,84 +53,32 @@ class CommissionsDetailView(DetailView):
     template_name = 'commissions_detail.html'
     form_class = JobApplicationForm
 
+    def get_context_data(self, **kwargs):
+        self.object = self.get_object()
+        context = super(CommissionsDetailView, self).get_context_data(**kwargs)
+        total_manpower_required = Job.objects.aggregate(total_manpower=Sum('manpower_required'))['total_manpower'] or 0
+        total_signees = JobApplication.objects.filter(status='Accepted').count()
+        open_manpower = max(total_manpower_required - total_signees, 0)
+        context['total_manpower_required'] = total_manpower_required
+        context['total_signees'] = total_signees
+        context['open_manpower'] = open_manpower
+        return context
+    
 
-    # def get_object(self, queryset=None):
-    #     return super().get_object(queryset=queryset)
-
-    # def post(self, request, *args, **kwargs):
-    #     commission = self.get_object()
-    #     job_application_form = JobApplicationForm(request.POST)
-    #     if job_application_form.is_valid():
-    #         job_application = job_application_form.save(commit=False)
-    #         job_application.job = commission
-    #         job_application.applicant = request.user.profile 
-    #         job_application.save()
-    #         return redirect('commissions:commissions_detail', pk=commission.pk)
-    #     else:
-    #         return self.render_to_response(self.get_context_data())
-
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['job_application_form'] = JobApplicationForm()  # Add the job application form to the context
-    #     return context
-
-    # def post(self, request, *args, **kwargs):
-    #     # commission = self.get_object()  # Retrieve the commission object
-    #     job_application_form = JobApplicationForm(request.POST)
-    #     if job_application_form.is_valid():
-    #         job_application = job_application_form.save(commit=False)
-    #         job_application.job = job_application_form.cleaned_data.get('job')
-    #         job_application.applicant = request.user.profile 
-    #         job_application.save()
-    #         return self.get(request, *args, **kwargs)
-    #         # return redirect('commissions:commissions_detail', pk=commission.pk)
-    #     else:
-    #         context = self.get_context_data(**kwargs)
-    #         context['job_application_form'] = job_application_form
-    #         return self.render_to_response(context)
-    #         # If form is not valid, render the detail view with the form
-    #         return self.render_to_response(self.get_context_data())
-
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     total_manpower_required = Job.objects.aggregate(total_manpower=Sum('manpower_required'))['total_manpower'] or 0
-    #     total_signees = JobApplication.objects.filter(status='Accepted').count()
-    #     open_manpower = max(total_manpower_required - total_signees, 0)
-    #     context['total_manpower_required'] = total_manpower_required
-    #     context['total_signees'] = total_signees
-    #     context['open_manpower'] = open_manpower
-    #     return context
-
-
-    # def post(self, request, *args, **kwargs):
-    #     job_application_form = JobApplicationForm(request.POST)
-    #     # context = self.get_context_data()
-    #     # job_application = context['job_application']
-    #     if job_application_form.is_valid():
-    #         job_application = JobApplication()
-    #         job_application.applicant = self.request.user.profile
-    #         job_application.job = job_application_form.cleaned_data.get('job')
-    #         job_application.save()
-    #         return self.get(request, *args, **kwargs)
-    #     else:
-    #         self.object_list = self.get_queryset(**kwargs)
-    #         context = self.get_context_data(**kwargs)
-    #         context['job_application_form'] = job_application_form
-    #         return self.render_to_response(context)
-
-        # commission = self.get_object()
-        # form = JobApplicationForm(request.POST)
-        # if form.is_valid():
-        #     job_application = form.save(commit=False)
-        #     job_application.job = commission
-        #     job_application.applicant = request.user.profile 
-        #     job_application.save()
-        #     return redirect('commissions:commissions_detail', pk=commission.pk)
-        # else:
-        #     return self.render_to_response(self.get_context_data(form=form))
-
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object() # gets the Commission object
+        job_application_form = JobApplicationForm(request.POST)
+        if job_application_form.is_valid():
+            job_application = job_application_form.save(commit=False) # create commission object but does not save
+            job_application.commission = self.object
+            print(job_application.commission)
+            job_application.applicant = self.request.user.profile
+            print(job_application.job)
+            job_application.save()
+            return redirect('commissions:commissions')
+        else:
+            return self.render_to_response(self.get_context_data(form=job_application_form))
+        
 
 class CommissionsJobCreateView(LoginRequiredMixin, CreateView):
     model = Commission

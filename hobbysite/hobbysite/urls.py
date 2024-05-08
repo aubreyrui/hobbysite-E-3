@@ -22,10 +22,10 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='base.html'), name='landing_page'), # https://www.geeksforgeeks.org/templateview-class-based-generic-view-django/
     # path('', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
     path('admin/', admin.site.urls),
-    path('blog/', include('blog.urls', namespace = 'blog')),
-    path('', include('wiki.urls', namespace = 'wiki')),
+    # path('blog/', include('blog.urls', namespace = 'blog')),
+    # path('', include('wiki.urls', namespace = 'wiki')),
     path('', include('commissions.urls', namespace='commissions')),
-    path('merchstore/', include('merchstore.urls', namespace='merchstore')),
+    # path('merchstore/', include('merchstore.urls', namespace='merchstore')),
     path('', include('user_management.urls', namespace='user_management')),
     path('profile/', include('django.contrib.auth.urls')),
     #path('profile/', include('user_management.urls', namespace='user_management')),
