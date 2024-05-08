@@ -4,21 +4,27 @@
 {% block content %}
 
 <div>
-    <img src = "{{ article.header_image.url }}" alt = "{{ article.title }}">
+    <center>
+        <img src = "{{ article.header_image.url }}" alt = "{{ article.title }}">
+    </center>
 </div>
 
-<h1>
-    {{ article.title }}
-</h1>
+<div style="text-align: center;">
+    <h1 style="font-style: bold; border: 1px solid #222; border-radius: 7px; padding: 10px; background-color: #e0ffff; color: #67203c; width: auto 0;">
+        {{ article.title }} by {{ article.article_author }}
+    </h1>
 
-<h2>
-    <a href="/blog/articles">
-        Go back to Article List
-    </a>
-</h2>
+    <h2>
+        <a href="/blog/articles">
+            Go back to Article List
+        </a>
+    </h2>
+</div>
 
 <h3>
-    Read more: {{article.category}}
+    <font size="-0.5">
+        Read more: {{article.category}}
+    </font>
 </h3>
 
 </h4>
@@ -31,20 +37,24 @@
             {% endif %}
         {% endif %}
     {% endfor %}
-</h4>
+</h4> <br>
 
 
 <p> Created on: {{ article.created_on }} </p>
 <p> Updated last: {{ article.updated_on }} </p> 
 <p> Category: {{ article.category }} </p>
-<p> Description: {{ article.description }} </p>
-<p> Blog Proper: <br> {{ article.entry|linebreaks }} </p>
+<p style="font-style: italic;"> Description: {{ article.description }} </p> <br>
+<p> Blog Proper: {{ article.entry|linebreaks }} </p>
 
-<h5>
+<br> <h5>
     {% if article.article_author == request.user.profile %}     <!--editable when article owner is logged in-->
-        <a href = "/blog/article/{{ article.pk }}/edit"> Edit the Article </a>
+        <p style="font-style: bold" align="right">
+            <a href = "/blog/article/{{ article.pk }}/edit"> Edit the Article </a>
+        </p>
     {% endif %} 
+</h5>
 
+<h6>
     {% if request.user.is_authenticated %}
     <form method = "POST">
         {% csrf_token %}
@@ -52,16 +62,16 @@
         <button type="submit">Add Comment</button>
     </form>
         {% endif %}
-</h5>
+</h6>
 
-<h6>
+<h7>
     {% for comment in comments %}
     {% if comment.article == article %}
         {{ comment.created_on }} || {{ comment.comment_author }}
-        <p>
+        <p style="font-weight: normal;">
             {{ comment.entry }}
         </p>
     {% endif %}
     {% endfor %}
-</h6>
+</h7>
 {% endblock content %}
