@@ -9,9 +9,9 @@
 
 <h2>
     My Article/s:
-    {% for articlecategory in object_list %}
-        {% for article in articlecategory.article.all %}
-            {% if article.article_author == request.user.profile %}
+    {% for category in object_list %}
+        {% for article in article.category.all %}
+            {% if article_author == request.user.profile %}
                 <li>
                     <a href="{{ article.get_absolute_url }}">
                         {{ article.title }}
@@ -24,23 +24,22 @@
 
 <h3>
     All Articles:
-    {% for category in article_category %}
-        <li>
-            <h4>{{category.name}}</h4>
-            <ul>
-                {% for article in category.article_category.all %}
-                    {% if request.user.is_authenticated %}
-                        {% if not article.author == request.user.username %}
-                            <li>
-                                <a href = "{{ article.get_absolute_url }}">{{article.title}}</a>
-                            </li>
-                        {% endif %}
-                    {% else %}
-                        <li>
-                            <a href = "{{ article.get_absolute_url }}">{{article.title}}</a>
-                        </li>
-                    {% endif %}
+    {% for category in object_list %}
+        <p>{{ article.title }}</p>
+        <p>{{ article.description }}</p>
+        {% if not article.article.all %}
+            <p>No available articles.</p>
+        {% else %}
+            {% for article in category.article_category.all %}
+                {% if article_author != request.user.profile %}
+                    <li>
+                        <a href="{{ article.get_absolute_url }}">
+                            {{ article.title }}
+                        </a>
+                    </li>
+                {% endif %}
             {% endfor %}
+        {% endif %}
     {% endfor %}
 </h3>
 

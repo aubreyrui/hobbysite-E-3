@@ -37,12 +37,12 @@
 <p> Created on: {{ article.created_on }} </p>
 <p> Updated last: {{ article.updated_on }} </p> 
 <p> Category: {{ article.category }} </p>
-<p> Description: {{ article.description}} </p>
+<p> Description: {{ article.description }} </p>
 <p> Blog Proper: <br> {{ article.entry|linebreaks }} </p>
 
 <h5>
     {% if article.article_author == request.user.profile %}     <!--editable when article owner is logged in-->
-        <a href = "/blog/article/{{ article.pk }}/edit"> Edit my Article </a>
+        <a href = "/blog/article/{{ article.pk }}/edit"> Edit the Article </a>
     {% endif %} 
 
     {% if request.user.is_authenticated %}
@@ -52,7 +52,9 @@
         <button type="submit">Add Comment</button>
     </form>
         {% endif %}
+</h5>
 
+<h6>
     {% for comment in comments %}
     {% if comment.article == article %}
         {{ comment.created_on }} || {{ comment.comment_author }}
@@ -61,6 +63,5 @@
         </p>
     {% endif %}
     {% endfor %}
-</h5>
-
+</h6>
 {% endblock content %}

@@ -47,7 +47,7 @@ class Comment(models.Model):
     
     
     class Meta:
-        ordering = ['-created_on']
+        ordering = ['-created_on']  # for the comments to be arranged from latest to oldest
         
     def __str__(self):
         return f"Comment by {self.comment_author} on {self.article.user}"

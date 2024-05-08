@@ -1,4 +1,3 @@
-from django.shortcuts import render, redirect
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -18,7 +17,7 @@ class ArticleListView(ListView):
 class ArticleList(ListView):
     model = Article
     context_object_name = "articles"
-    template_name = "wiki/article_list.html"
+    template_name = "blog_article_list.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
