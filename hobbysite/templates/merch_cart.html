@@ -8,11 +8,13 @@ Merch Cart
 
 {% block content %}
 
-{% if request.user.is_authenticated %}
+<h3><p>{{ request.user.username }}'s  Transaction </p>
+</h3>
+<p><a href="/merchstore/items">Return to List</a></p>
 
-{% for items in object_list %}
-{% if request.user.username is transaction.buyer %}
 <ul>
+    {% for items in object_list %}
+    {% if items.product.owner == owner %}
     <li>{{ items.product.name }}</li>
     <ul>
         <li>Price: {{ items.product.price }}</li>
@@ -20,11 +22,13 @@ Merch Cart
         <li>Amount: {{ items.amount }}</li>
         <li>Status: {{ items.status }}</li>
     </ul>
+    {% endif %}
+    {% endfor %}
 </ul>
-{% end if%}
-
-{% endfor %}
-
-{% endif %}
     
 {% endblock content %}
+
+{% block form %}
+{% endblock form %}
+{% block scripts %}
+{% endblock scripts %}

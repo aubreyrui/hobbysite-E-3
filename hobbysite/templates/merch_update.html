@@ -15,7 +15,11 @@ Merch Update {{ product.name }}
 </form>
 
 <p>
-    <a href="{% url 'merchstorer:product_detail' pk=view.kwargs.pk %}">Go back</a>
+    <a href="{% url 'merchstore:product_detail' pk=view.kwargs.pk %}">Go back</a>
 </p>
 
 {% endblock content %}
+{% block form %}
+{% endblock form %}
+{% block scripts %}
+{% endblock scripts %}

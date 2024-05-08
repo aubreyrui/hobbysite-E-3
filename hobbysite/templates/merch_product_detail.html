@@ -8,9 +8,21 @@
 
 {% block content %}
 
+{% if request.user.is_authenticated %}
+
+<p>Logged in User: {{ request.user.username }} </p>
+
+{% else %}
+
+<p> Guest </p>
+
+{% endif %}
+
 <h2>{{ product.name }}</h2>
 <ul>
     <li><h3>Price: {{ product.price }}</h3></li>
+    <li><h3>Stock: {{ product.stock }}</h3></li>
+    <li><h3>{{ product.status }}</h3></li>
     <li>
         <p>
             <b>Product type: {{ product.producttype }}</b> <br> {{ product.producttype.description }}
@@ -20,32 +32,18 @@
 </ul>
 <br>
 
-{% if request.user.is_authenticated %}
-<!-- Dealing with Login Users-->
-{% if request.user is product.owner %}
+{% if request.user.profile == product.owner %}
 
 <h3><a href="{% url 'merchstore:product_update' pk=product.pk %}">Update Product</a></h3>
 
-{% else %}
+{% endif %}
 
 <form method="post">
     {% csrf_token %}
     {{ form }}
-    <button type="submit" {% if product.stock is 0 %}disabled{% endif %}>Submit</button>
+    <input type="submit" value="purchase" {% if request.user.profile == product.owner or product.stock is 0 %}disabled{% endif %}>
 </form>
 
-{% endif %}
-
-<!-- Dealing with Non-Login Users-->
-{% else %}
-
-<form method="post">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit" {% if product.stock is 0 %}disabled{% endif %}>Submit</button>
-</form>
-
-{% endif %}
 
 <p><a href="/merchstore/items">Return to List</a></p>
 
@@ -58,3 +56,8 @@
 -->
 
 {% endblock content %}
+
+{% block form %}
+{% endblock form %}
+{% block scripts %}
+{% endblock scripts %}

@@ -22,9 +22,9 @@ class ProductTypeAdmin(admin.ModelAdmin):
 class ProductAdmin(admin.ModelAdmin):
     model = Product
 
-    list_display = ['name', 'price',]
+    list_display = ['owner','name', 'price','stock',]
     search_fields = ['name',]
-    ordering = ['name',]
+    ordering = ['owner','name',]
 
 class TransactionAdmin(admin.ModelAdmin):
     model = Transaction

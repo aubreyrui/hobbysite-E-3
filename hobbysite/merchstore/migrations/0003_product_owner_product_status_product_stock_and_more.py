@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='product',
             name='status',
-            field=models.CharField(choices=[('SALE', 'On Sale'), ('AVAIL', 'Available')], default=merchstore.models.stockstate, max_length=255),
+            field=models.CharField(choices=[('SALE', 'On Sale'), ('AVAIL', 'Available')], max_length=255),
         ),
         migrations.AddField(
             model_name='product',

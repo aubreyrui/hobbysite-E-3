@@ -8,18 +8,24 @@ Merch Transaction
 
 {% block content %}
 
-{% for items in object_list %}
-{% if request.user.username is product.owner %}
+<h3><p>{{ request.user.username }}'s  Transaction </p>
+</h3>
+<p><a href="/merchstore/items">Return to List</a></p>
+
+{% for buyer in object_list.buyer %}
+{% if buyer is not request.user.profile %}
 <ul> 
-    <li>{{ items.product.name }}</li>
-    <ul>
-        <li>Price: {{ items.product.price }}</li>
-        <li>Product Type: {{ items.product.producttype }}</li>
-        <li>Amount: {{ items.amount }}</li>
-        <li>Status: {{ items.status }}</li>
-    </ul>
+    {% for transact in object_list %}
+    {% if transact.buyer is buyer %}
+    <li>{{ transact }}</li>
+    {% endif %}
+    {% endfor %}
 </ul>
 {% endif %}
 {% endfor %}
 
 {% endblock content %}
+{% block form %}
+{% endblock form %}
+{% block scripts %}
+{% endblock scripts %}

@@ -13,18 +13,14 @@ class ProductType(models.Model):
     class meta:
             ordering = ['name']
 
-def stockstate():
-    if Product.stock == 0:
-        return "Out of Stock"
-    else:
-        return "Available"
-
 class Product(models.Model):
     SALE = "SALE"
     AVAIL = "AVAIL"
+    NOSTOCK = "EMPTY"
     statuschoice = {
         SALE: "On Sale",
-        AVAIL: "Available"
+        AVAIL: "Available",
+        NOSTOCK: "Out of Stock"
     }
     name = models.CharField(max_length = 255)
     description = models.TextField()
@@ -33,17 +29,19 @@ class Product(models.Model):
     owner = models.ForeignKey(Profile, null=False, on_delete=models.CASCADE)
     stock = models.IntegerField(default=0,
         validators=[
-            MinValueValidator(0, "Number of stock should be nonnegative!")
+            MinValueValidator(1, "Number of stock should be nonnegative!")
         ]
     )
-    status = models.CharField(max_length=255, default=stockstate, choices=statuschoice)
+    status = models.CharField(max_length=255, choices=statuschoice)
 
-    @property
     def __str__(self):
         return self.name
     
-    def getStock(self):
-        return self.stock
+    def status(self):
+        if self.stock <= 0:
+            self.status = "Out of Stock"
+        else:
+            self.status = "Available"
 
     def get_absolute_url(self):
         return reverse('merchstore:product_detail', args=str(self.pk))
@@ -78,11 +76,8 @@ class Transaction(models.Model):
     def get_absolute_url(self):
         return reverse('merchstore:transaction_detail', args=str(self.pk))
     
-    def stock_validation(self):
-        if (self.product.stock - self.amount) < 0:
-            return "You can't purchase more than " + self.product.name + " available stock!"
-        else:
-            return "You can purchase!"
-    
     def total(self):
-        return self.amount*self.product.price
+        return float(self.product.price*self.amount)
+    
+    def __str__(self):
+        return f"{self.product} ({self.amount}) - {self.status} | Php {self.total}"

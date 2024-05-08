@@ -8,11 +8,20 @@ Merch List
 
 {% block content %}
 <h2> Merch List</h2>
+
 {% if request.user.is_authenticated %}
 
 <p><a href="{% url 'merchstore:product_create' %}">Create Product</a></p>
+<p>Logged in User: {{ request.user.username }} </p>
+
+{% else %}
+
+<p> Guest </p>
 
 {% endif %}
+<p><a href="{% url 'merchstore:product_transaction' %}">Your Product Transactions</a></p>
+<p><a href="{% url 'merchstore:product_cart' %}">Your Cart</a></p>
+
 <ul>
     {% for product in object_list %}
     <li><a href="{{ product.get_absolute_url }}">[{{ product.producttype }}] {{ product.name }}</a></li>
@@ -23,3 +32,8 @@ Merch List
 </ul>
 
 {% endblock content %}
+
+{% block form %}
+{% endblock form %}
+{% block scripts %}
+{% endblock scripts %}
