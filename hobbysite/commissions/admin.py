@@ -8,7 +8,7 @@ class JobAdmin(admin.ModelAdmin):
 
 class JobApplicationAdmin(admin.ModelAdmin):
     model = JobApplication
-    list_display = ['status']
+    list_display = ['applicant']
 
 
 class CommissionAdmin(admin.ModelAdmin):

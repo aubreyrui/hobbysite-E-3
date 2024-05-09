@@ -20,7 +20,6 @@ class Commission(models.Model):
         choices = StatusChoices.choices,
         default = StatusChoices.OPEN,
         )
-    people_required = models.IntegerField(null = False)
     created_on = models.DateField(null = False, auto_now_add = True)
     updated_on = models.DateField(null = False, auto_now = True)
 
@@ -59,11 +58,7 @@ class Job(models.Model):
     def __str__(self):
         return str(self.role)
     
-
-    def getManpowerRequired():
-        return Job.manpower_required
     
-
 class JobApplication(models.Model):
 
     class StatusChoices(models.IntegerChoices):
@@ -74,19 +69,16 @@ class JobApplication(models.Model):
 	
     job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='job')
     applicant = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='applicant')
-    status = models.CharField(
-        max_length = 8,
+    status = models.PositiveSmallIntegerField(
 		choices = StatusChoices.choices,
 		default = StatusChoices.PENDING,
         )
     applied_on = models.DateField(null = False, auto_now_add = True)
 	
+
     class Meta:
         ordering = ['status', '-applied_on']
 
     
-    # def manpower_validation(self):
-    #     if (self.job.status.ACCEPTED == self.job.manpower_required):
-    #         return "You cannot apply to this job anymore."
-    #     else:
-    #         return "You can apply."
+    def __str__(self):
+        return str(self.job)

@@ -13,43 +13,42 @@
     }
 </style>
 <body>
+    {% if request.user.is_authenticated%}
     <h2> List of Commissions Created by {{ request.user.profile }} </h2>
-    {% for commission in object_list %}
+    {% for commission in my_commissions %}
         {% if commission.author == request.user.profile %}
             <p style="margin-top: +20px;"><a href="{{commission.get_absolute_url}}">
-                {{ commission.title }}</a>  by {{ commission.author }} - {{ commission.people_required }} Available Slots </p>
+                {{ commission.title }}</a>  by {{ commission.author }} - {{ total_manpower_required }} Available Slots </p>
             <p> Status: {{ commission.get_status_display }} </p>
             <p> created on: {{ commission.created_on }}</p>
             <p> updated on: {{ commission.updated_on }}</p>
         {% endif %}
     {% endfor %}   
+
     <h2> List of Commissions {{ request.user.profile }} Applied To </h2>
-    {% for commission in object_list %}
-        {% if commission.author == request.user.profile %}
-            {% if job_application.applicant == request.user.profile %}
-            <p style="margin-top: +20px;"><a href="{{commission.get_absolute_url}}">
-                {{ commission.title }}</a>  by {{ commission.author }} - {{ commission.people_required }} Available Slots </p>
-                <p> Status: {{ commission.get_status_display }} </p>
-                <p> created on: {{ commission.created_on }}</p>
-                <p> updated on: {{ commission.updated_on }}</p>
-            {% endif %}
-        {% endif %}
+    {% for commission in commissions_applied %}
+        <p style="margin-top: +20px;"><a href="{{commission.get_absolute_url}}">
+            {{ commission.job.commission }}</a>  by {{ commission.job.commission.author }} </p>
+            <p> Role: {{ commission.job }} </p>
+            <p> Status: {{ commission.get_status_display }} </p>
+            <p> applied on: {{ commission.applied_on }}</p>     
     {% endfor %}
-            
+    {% endif %}        
         
     <div class="commission-container">
         <h2> List of Current Available Commissions </h2>
         {% for commission in object_list %}
             {% if commission.author != request.user.profile %}
                 <p style="margin-top: +20px;"><a href="{{commission.get_absolute_url}}">
-                    {{ commission.title }}</a>  by {{ commission.author }} - {{ commission.people_required }} Available Slots </p>
+                    {{ commission.title }}</a>  by {{ commission.author }} </p>
                 <p> Status: {{ commission.get_status_display }} </p>
                 <p> created on: {{ commission.created_on }}</p>
                 <p> updated on: {{ commission.updated_on }}</p>
             {% endif %}
         {% endfor %}
-        
-        <a href="/commissions/add">Create a Commission</a>
+        {% if request.user.is_authenticated%}
+            <a href="/commissions/add">Create a Commission</a>
+        {% endif %}
     </div>
 </body>
 {% endblock content %}

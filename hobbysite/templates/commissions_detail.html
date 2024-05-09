@@ -17,7 +17,7 @@
         {% if commission.author == request.user.profile %}
             <a href="/commissions/{{commission.pk}}/edit">Edit the Commission</a>
         {% endif %}
-        <h3>Total Spots Available: {{ commission.people_required }}</h3>
+        <h3>Total Spots Available: {{ total_manpower_required }}</h3>
         <p>{{ commission.description }}</p>
     </div>  
 
@@ -31,11 +31,15 @@
 
         {% if request.user.is_authenticated%}
             {% if commission.author != request.user.profile %}
-                <form method="POST">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit"> Apply to Job</button>
-                </form>
+                {% if total_accepted_applicants == total_manpower_required%}
+                    <p>Sorry! You cannot apply for this job anymore.</p>
+                {% else %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit"> Apply to Job</button>
+                    </form>
+                {% endif %}
             {% endif %}
         {% endif %}
 

@@ -1,68 +1,49 @@
 from contextlib import redirect_stderr
 from typing import Any
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.forms import formset_factory
-from django.http import HttpResponseBadRequest
 from django.db.models import Sum
 
 from .models import Commission, Job, JobApplication
 from .forms import CommissionForm, JobFormSet ,JobApplicationForm 
 
-def commissions_list(request):    
-    commissions = Commission.objects.all()
-    job_applicants = JobApplication.objects.all()
-    ctx = {
-        "commissions": commissions,
-        "job_applicants": job_applicants
-           }
-    return render(request, "commissions_list.html", ctx)
-
-
-def commissions_detail(self, request, pk):
-    commission = Commission.objects.get(pk=pk)
-    job_applications = JobApplication.objects.all()
-    ctx = {
-        "commission": commission,
-        "job_application": job_applications
-           }
-    return render(request, "commission_detail.html", ctx)
-
-
-def commissions_create(request):
-    commission = Commission.objects.all()
-    ctx = {"commission": commission}
-    return render(request, "commissions_create.html", ctx)
-
-
-def commissions_update(request, pk):
-    commission = Commission.objects.get(pk=pk)
-    ctx = {"commission": commission}
-    return render(request, "commission_update.html", ctx)
 
 class CommissionsListView(ListView):
     model = Commission
     template_name = 'commissions_list.html'
 
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            context['my_commissions'] = Commission.objects.filter(author=self.request.user.profile)
+            context['commissions_applied'] = JobApplication.objects.filter(applicant = self.request.user.profile)
+        return context
 
 class CommissionsDetailView(DetailView):
     model = Commission
-    template_name = 'commissions_detail.html'
     form_class = JobApplicationForm()
+    template_name = 'commissions_detail.html'
+    
 
     def get_context_data(self, **kwargs):
-        self.object = self.get_object()
+        commission = self.get_object()
         context = super(CommissionsDetailView, self).get_context_data(**kwargs)
-        total_manpower_required = Job.objects.aggregate(total_manpower=Sum('manpower_required'))['total_manpower'] or 0
-        print(total_manpower_required)
-        total_signees = JobApplication.objects.filter(status='Accepted').count()
-        open_manpower = max(total_manpower_required - total_signees, 0)
+        jobs = Job.objects.filter(commission=commission)
+        total_manpower_required = jobs.aggregate(total_manpower=Sum('manpower_required'))['total_manpower'] or 0
+        total_accepted_applicants = JobApplication.objects.filter(job__in=jobs, status="2").count()
+        open_manpower = total_manpower_required - total_accepted_applicants
+
+        context['edit'] = self.request.user == commission.author
+        context['commission'] = commission
+        context['jobs'] = jobs
         context['total_manpower_required'] = total_manpower_required
-        context['total_signees'] = total_signees
+        context['total_accepted_applicants'] = total_accepted_applicants
         context['open_manpower'] = open_manpower
+        context['job_application_form'] = JobApplicationForm()
         return context
     
 
@@ -83,7 +64,7 @@ class CommissionsDetailView(DetailView):
 class CommissionsJobCreateView(LoginRequiredMixin, CreateView):
     model = Commission
     template_name = 'commissions_create.html'
-    fields = ['title', 'description', 'status', 'people_required']
+    fields = ['title', 'description', 'status']
 
 
     def get_context_data(self, **kwargs):
@@ -121,4 +102,22 @@ class CommissionsUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
         obj = self.request.user.profile
         return obj.user == self.request.user
     
-    # if model.job.status == 'Full':
+    def form_valid(self, form):
+        form.instance.job = self.get_object()
+        commission = form.save(commit=False) # create commission object but does not save
+        # jobs = Job.objects.filter(commission=commission)
+        print(commission.status)
+        if all(job.status == '2' for job in Job.commission.objects.all()):
+            commission.status = '2'
+            print('status full')
+        else:
+            print('no')
+        # for job in jobs:
+        #     if job.status == '2':
+        #         var += 1
+        #         if var == total_manpower_required
+        # if all(Job.objects.get(status='2')):
+        #     commission.status = 2
+        commission.save()
+        
+        return super().form_valid(form)
