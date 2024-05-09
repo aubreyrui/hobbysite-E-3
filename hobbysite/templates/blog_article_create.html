@@ -1,0 +1,16 @@
+{% extends 'blog_base.html' %}
+{% load static %}
+{% block title %}Create an Article{% endblock %}
+{% block content %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_div }}
+        <button type="submit">Create</button>
+    </form>
+
+        <h1>
+            <a href = '/blog/articles'>
+                Go back to Articles
+            </a>
+        </h1>
+{% endblock content %}

@@ -14,6 +14,9 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,9 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'merchstore',
-    'wiki',
-    'commissions',
     'blog',
     'user_management'
 ]
@@ -117,7 +117,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
