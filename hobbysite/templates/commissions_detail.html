@@ -9,6 +9,15 @@
     body {
         text-align: center;
     }
+    .job_entry{
+        border: 1px solid;
+        padding: 10px;
+        margin-bottom: 10px; 
+        width: 400px;
+        margin: 0 auto;
+        margin-bottom: 10px;
+    }
+    
 </style>
 <body>
     <div class="commission">
@@ -17,21 +26,24 @@
         {% if commission.author == request.user.profile %}
             <a href="/commissions/{{commission.pk}}/edit">Edit the Commission</a>
         {% endif %}
-        <h3>Total Spots Available: {{ total_manpower_required }}</h3>
+        <h3>Total Spots : {{ total_manpower_required }}</h3> 
+        <h3>Total Spots Open: {{ total_open_manpower }}</h3>
         <p>{{ commission.description }}</p>
     </div>  
 
     <div class="job">
-        <h2>Jobs Needed</h2>
         {% for job in commission.commissions.all %}
-        <p>Role: {{ job.role }} - Status: {{ job.get_status_display }}</p>
-        <p>Manpower Required for {{ job.role }}: {{ job.manpower_required }}</p>
-        <p>Open Slots for {{ job.role }}: {{ open_manpower }}</p>
+            <div class = "job_entry">
+                <p>Role: {{ job.role }} - Status: {{ job.get_status_display }}</p> 
+                <p>Manpower Required for {{ job.role }}: {{ job.manpower_required }}</p>
+                <p>Open Slots for {{ job.role }}: {{job.number_of_accepted_applicants }}</p> 
+            </div>
         {% endfor %}
+    </div>
 
-        {% if request.user.is_authenticated%}
+        {% if request.user.is_authenticated %}
             {% if commission.author != request.user.profile %}
-                {% if total_accepted_applicants == total_manpower_required%}
+                {% if total_accepted_applicants == total_manpower_required %}
                     <p>Sorry! You cannot apply for this job anymore.</p>
                 {% else %}
                     <form method="POST">
@@ -42,11 +54,11 @@
                 {% endif %}
             {% endif %}
         {% endif %}
-
     </div>
-   
+  
     <a href="/commissions/list">Back to List</a>
 </body>
+
 {% endblock content %}
 {% block form %}
 {% endblock form %}

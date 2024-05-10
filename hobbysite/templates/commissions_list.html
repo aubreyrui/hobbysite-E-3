@@ -19,7 +19,7 @@
         {% if commission.author == request.user.profile %}
             <p style="margin-top: +20px;"><a href="{{commission.get_absolute_url}}">
                 {{ commission.title }}</a>  by {{ commission.author }} - {{ total_manpower_required }} Available Slots </p>
-            <p> Status: {{ commission.get_status_display }} </p>
+            <p> Status: {{ commission.job_checker }} </p>
             <p> created on: {{ commission.created_on }}</p>
             <p> updated on: {{ commission.updated_on }}</p>
         {% endif %}
@@ -27,7 +27,7 @@
 
     <h2> List of Commissions {{ request.user.profile }} Applied To </h2>
     {% for commission in commissions_applied %}
-        <p style="margin-top: +20px;"><a href="{{commission.get_absolute_url}}">
+        <p style="margin-top: +20px;"><a href="{{ commission.get_absolute_url }}"> <!-- to fix-->
             {{ commission.job.commission }}</a>  by {{ commission.job.commission.author }} </p>
             <p> Role: {{ commission.job }} </p>
             <p> Status: {{ commission.get_status_display }} </p>
@@ -41,7 +41,7 @@
             {% if commission.author != request.user.profile %}
                 <p style="margin-top: +20px;"><a href="{{commission.get_absolute_url}}">
                     {{ commission.title }}</a>  by {{ commission.author }} </p>
-                <p> Status: {{ commission.get_status_display }} </p>
+                <p> Status: {{ commission.job_checker }} </p>
                 <p> created on: {{ commission.created_on }}</p>
                 <p> updated on: {{ commission.updated_on }}</p>
             {% endif %}
@@ -52,7 +52,5 @@
     </div>
 </body>
 {% endblock content %}
-{% block form %}
-{% endblock form %}
 {% block scripts %}
 {% endblock scripts %}

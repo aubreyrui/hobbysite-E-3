@@ -22,5 +22,4 @@ JobFormSet = forms.inlineformset_factory(
 class JobApplicationForm(forms.ModelForm):
     class Meta:
         model = JobApplication
-        fields = ['job']
-        job = forms.ModelChoiceField(queryset=JobApplication.objects.all())
+        exclude = ["status", "applicant", "applied_on"]

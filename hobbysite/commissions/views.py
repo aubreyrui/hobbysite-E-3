@@ -35,14 +35,15 @@ class CommissionsDetailView(DetailView):
         jobs = Job.objects.filter(commission=commission)
         total_manpower_required = jobs.aggregate(total_manpower=Sum('manpower_required'))['total_manpower'] or 0
         total_accepted_applicants = JobApplication.objects.filter(job__in=jobs, status="2").count()
-        open_manpower = total_manpower_required - total_accepted_applicants
+        total_open_manpower = total_manpower_required - total_accepted_applicants
+        
 
         context['edit'] = self.request.user == commission.author
         context['commission'] = commission
         context['jobs'] = jobs
         context['total_manpower_required'] = total_manpower_required
         context['total_accepted_applicants'] = total_accepted_applicants
-        context['open_manpower'] = open_manpower
+        context['total_open_manpower'] = total_open_manpower
         context['job_application_form'] = JobApplicationForm()
         return context
     
@@ -50,11 +51,12 @@ class CommissionsDetailView(DetailView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object() # gets the Commission object
         job_application_form = JobApplicationForm(request.POST)
-        job_application_form.fields['job'].queryset = Job.objects.filter(commission=self.object)
+        job_application_form.fields['job'].queryset = Job.objects.filter(commission=self.object, status = '1')    
         if job_application_form.is_valid():
-            job_application = job_application_form.save(commit=False) # create commission object but does not save
+            job_application = job_application_form.save(commit=False) # create commission object but does not save 
             job_application.commission = self.object
             job_application.applicant = self.request.user.profile
+            job_application.status = '1'
             job_application.save()
             return redirect('commissions:commissions')
         else:
@@ -105,19 +107,9 @@ class CommissionsUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
     def form_valid(self, form):
         form.instance.job = self.get_object()
         commission = form.save(commit=False) # create commission object but does not save
-        # jobs = Job.objects.filter(commission=commission)
-        print(commission.status)
-        if all(job.status == '2' for job in Job.commission.objects.all()):
-            commission.status = '2'
-            print('status full')
-        else:
-            print('no')
-        # for job in jobs:
-        #     if job.status == '2':
-        #         var += 1
-        #         if var == total_manpower_required
-        # if all(Job.objects.get(status='2')):
-        #     commission.status = 2
+        jobs = Job.objects.filter(commission=commission)
+        if all(job.status == 2 for job in jobs):
+            commission.status = 2 
+            commission.save()
         commission.save()
-        
         return super().form_valid(form)
