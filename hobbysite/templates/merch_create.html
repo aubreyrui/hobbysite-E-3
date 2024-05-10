@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %} 
+Create Product
+{% endblock title %}
+
+{% block content %}
+
+{% if request.user.is_authenticated %}
+<form method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Submit</button>
+</form>
+
+<a href="{% url 'merchstore:product_list' %}">Go back to Product List</a>
+
+{% endif %}
+
+{% endblock content %}
+
+{% block scripts %}
+{% endblock scripts %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Create Profile{% endblock %}
+{% block heading %}
+{% endblock heading %}
+{% block form %}
+{% endblock form %}
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_div }}
+        <button type="submit">Create</button>
+    </form>
+{% endblock content %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %} 
+{{product.name}}
+{% endblock title %}
+
+{% block content %}
+
+{% if request.user.is_authenticated %}
+
+<p>Logged in User: {{ request.user.username }} | {{ request.user.profile }} </p>
+
+{% else %}
+
+<p> Guest </p>
+
+{% endif %}
+
+<h2>{{ product.name }}</h2>
+<ul>
+    <li><h3>Price: {{ product.price }}</h3></li>
+    <li><h3>Stock: {{ object.stock }}</h3></li>
+    <li><h3>{{ object.status }}</h3></li>
+    <li>
+        <p>
+            <b>Product type: {{ product.producttype }}</b> <br> {{ product.producttype.description }}
+        </p>
+    </li>
+    <li><p><b>Product Description:</b><br> {{ product.description }}</p></li>
+</ul>
+<br>
+
+{% if request.user.profile == product.owner %}
+
+<h3><a href="{% url 'merchstore:product_update' pk=product.pk %}">Update Product</a></h3>
+
+{% endif %}
+
+<form method="post" action="">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="buy" {% if request.user.profile == product.owner or product.stock is 0 %}disabled{% endif %}>
+</form>
+
+
+<p><a href="/merchstore/items">Return to List</a></p>
+
+{% endblock content %}
+
+{% block scripts %}
+{% endblock scripts %}
+
+{% block form %}
+{% endblock form %}

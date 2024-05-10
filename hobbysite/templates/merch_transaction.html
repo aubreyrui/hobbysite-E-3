@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %} 
+Merch Transaction
+{% endblock title %}
+
+{% block content %}
+
+<h3><p>{{ request.user.username }}'s  Product's Transaction </p>
+</h3>
+<p><a href="/merchstore/items">Return to List</a></p>
+
+{% for buyer in buyers %}
+{% if buyer != request.user.profile %}
+    <h2>{{ buyer }}</h2>
+{% endif %}
+    <ul>
+    {% for transact in object_list %}
+    {% if transact.product.owner is not buyer %}
+    <ul>
+        <li>
+            {{ transact }}
+        </li>
+    </ul>
+    {% endif %}
+    {% endfor %}
+</ul>
+{% endfor %}
+{% endblock content %}
+{% block scripts %}
+{% endblock scripts %}
