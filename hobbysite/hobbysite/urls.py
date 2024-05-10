@@ -22,5 +22,4 @@ urlpatterns = [
     path('merchstore/', include('merchstore.urls', namespace='merchstore')),
     path('',include('user_management.urls', namespace ="user_management")),
     path('', include('django.contrib.auth.urls'))
-    # ^^ for testing purposes
 ]
