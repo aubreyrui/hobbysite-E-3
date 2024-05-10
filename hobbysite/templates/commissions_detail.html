@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Commissions App{% endblock title %}
+{% block content %}
+<style>
+    .job {
+        padding-top: 5%;
+    }
+    body {
+        text-align: center;
+    }
+    .job_entry{
+        border: 1px solid;
+        padding: 10px;
+        margin-bottom: 10px; 
+        width: 400px;
+        margin: 0 auto;
+        margin-bottom: 10px;
+    }
+    
+</style>
+<body>
+    <div class="commission">
+        <h2> {{ commission.title }} </h2>
+        <h5>Created On: {{ commission.created_on }}</h5>
+        {% if commission.author == request.user.profile %}
+            <a href="/commissions/{{commission.pk}}/edit">Edit the Commission</a>
+        {% endif %}
+        <h3>Total Spots : {{ total_manpower_required }}</h3> 
+        <h3>Total Spots Open: {{ total_open_manpower }}</h3>
+        <p>{{ commission.description }}</p>
+    </div>  
+
+    <div class="job">
+        {% for job in commission.commissions.all %}
+            <div class = "job_entry">
+                <p>Role: {{ job.role }} - Status: {{ job.get_status_display }}</p> 
+                <p>Manpower Required for {{ job.role }}: {{ job.manpower_required }}</p>
+                <p>Open Slots for {{ job.role }}: {{job.number_of_accepted_applicants }}</p> 
+            </div>
+        {% endfor %}
+    </div>
+
+        {% if request.user.is_authenticated %}
+            {% if commission.author != request.user.profile %}
+                {% if total_accepted_applicants == total_manpower_required %}
+                    <p>Sorry! You cannot apply for this job anymore.</p>
+                {% else %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit"> Apply to Job</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    </div>
+  
+    <a href="/commissions/list">Back to List</a>
+</body>
+
+{% endblock content %}
+{% block form %}
+{% endblock form %}
+{% block scripts %}
+{% endblock scripts %}

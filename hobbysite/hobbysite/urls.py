@@ -21,7 +21,6 @@ from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
 urlpatterns = [
-    path('', TemplateView.as_view(template_name = 'base.html'), name='landing_page'),
     path('admin/', admin.site.urls),
     path('blog/', include('blog.urls', namespace = 'blog')),
     path('', include('wiki.urls', namespace = 'wiki')),

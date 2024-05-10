@@ -13,9 +13,6 @@ class ProfileUpdateView(UpdateView):
     def get_object(self, queryset=None):
         return self.request.user.profile
 
-    def get_object(self, queryset=None):
-        return self.request.user.profile
-
     def form_valid(self, form):
         profile = form.save(commit=False)
         profile.display_name = form.cleaned_data['display_name'] #manually accessing the values
