@@ -12,6 +12,9 @@ class ProfileInline(admin.StackedInline):
 
 class UserAdmin(BaseUserAdmin):
     inlines = [ProfileInline,]
+    add_fieldsets = (
+            (None, {'fields': ('display_name','email', 'password',)}),
+        )
 
 
 admin.site.unregister(User)

@@ -8,23 +8,21 @@ Merch Cart
 
 {% block content %}
 
-<h3><p>{{ request.user.username }}'s  Cart </p>
-</h3>
+<h3><p>{{ request.user.username }}'s  Cart </p></h3>
 <p><a href="/merchstore/items">Return to List</a></p>
-
-    {% for seller in owners %}
+{% for seller in owners %}
         {% if seller != request.user.profile %}
             <h2>{{ seller }}</h2>
-        {% endif %}
-        <ul>
         {% for transact in object_list %}
-            {% if transact.product.owner is not seller %}
+        <ul>
+            {% if seller == transact.product.owner %}
             <li>
-                {{ transact }}
+                {{ transact }} by {{ transact.product.owner }} | {{ transact.created_on }}
             </li>
             {% endif %}
-        {% endfor %}
         </ul>
+        {% endfor %}
+        {% endif %}
     {% endfor %}
 {% endblock content %}
 

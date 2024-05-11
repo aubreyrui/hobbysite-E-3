@@ -15,17 +15,16 @@ Merch Transaction
 {% for buyer in buyers %}
 {% if buyer != request.user.profile %}
     <h2>{{ buyer }}</h2>
-{% endif %}
-    <ul>
     {% for transact in object_list %}
-    {% if transact.product.owner is not buyer %}
+    {% if transact.product.owner == request.user.profile %}
     <ul>
         <li>
-            {{ transact }}
+            {{ transact }} | {{ transact.created_on }}
         </li>
     </ul>
     {% endif %}
     {% endfor %}
+    {% endif %}
 </ul>
 {% endfor %}
 {% endblock content %}

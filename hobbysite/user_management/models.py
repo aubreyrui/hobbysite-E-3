@@ -10,3 +10,9 @@ class Profile(models.Model):
 
 	def __str__ (self):
 		return self.display_name
+	
+	def save(self, *args, **kwargs):
+		# saving email address to the User database itself
+		self.user.email = self.email_address
+		self.user.save()
+		super(Profile,self).save(*args,**kwargs)
