@@ -22,12 +22,14 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('blog/', include('blog.urls', namespace = 'blog')),
+    path('blog/', include('blog.urls', namespace = 'wiki')),    
     path('', include('wiki.urls', namespace = 'wiki')),
     path('', include('commissions.urls', namespace='commissions')),
     path('merchstore/', include('merchstore.urls', namespace='merchstore')),
-    path('',include('django.contrib.auth.urls')),
-    path('', include('user_management.urls', namespace= 'user_management'))
-]
+    path('profile/',include('django.contrib.auth.urls')),
+    path('profile/', include('user_management.urls', namespace='user_management')),
+    path('', TemplateView.as_view(template_name = 'base.html'), name='landing_page')
+    
 
+]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -6,5 +6,9 @@
     <h1> Login </h1>
 {% endblock content %}
 {% block scripts %}
-    <a href="{% url 'password_reset' %} " style="text-align: center;">Forgot your password?</a>
+<div style="text-align: center;">
+    <a href="{% url 'password_reset' %} ">Forgot your password?</a>
+    <a href="{% url 'user_management:profile_create' %}">Create Account</a>
+</div>
+   
 {% endblock scripts %}
