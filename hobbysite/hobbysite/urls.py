@@ -22,7 +22,7 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('blog/', include('blog.urls', namespace = 'wiki')),    
+    path('blog/', include('blog.urls', namespace = 'blog')),    
     path('', include('wiki.urls', namespace = 'wiki')),
     path('', include('commissions.urls', namespace='commissions')),
     path('merchstore/', include('merchstore.urls', namespace='merchstore')),
