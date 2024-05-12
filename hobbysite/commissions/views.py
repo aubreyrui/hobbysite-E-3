@@ -1,6 +1,6 @@
 from contextlib import redirect_stderr
 from typing import Any
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Sum
 
 from .models import Commission, Job, JobApplication
-from .forms import CommissionForm, JobFormSet ,JobApplicationForm 
+from .forms import CommissionForm, JobFormSet, JobApplicationForm, ExtraJobForm
 
 
 class CommissionsListView(ListView):
@@ -94,6 +94,19 @@ class CommissionsJobCreateView(LoginRequiredMixin, CreateView):
             return self.render_to_response(self.get_context_data(form=form))
         return super().form_valid(form)
        
+
+class ExtraJobCreateView(LoginRequiredMixin, CreateView):
+    template_name = 'commissions_createjobs.html'
+    form_class = ExtraJobForm
+
+
+    def form_valid(self, form):
+        commission = get_object_or_404(Commission, pk=self.kwargs['pk'])
+        job = form.save(commit=False)
+        job.commission = commission
+        job.save()
+        return redirect('commissions:commissions_detail', pk=commission.pk)
+
 
 class CommissionsUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Commission

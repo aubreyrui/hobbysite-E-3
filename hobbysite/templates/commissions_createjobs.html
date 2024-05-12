@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Commissions App{% endblock title %}
+{% block content %}
+<style>
+    body {
+        text-align: center;
+        align-self: center;
+    }
+</style>
+{% endblock content %}
+{% block form %}
+<body>   
+    <h2>Add Additional Job</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Job</button>
+    </form>  
+</body>
+{% endblock form %}
+{% block scripts %}
+{% endblock scripts %}

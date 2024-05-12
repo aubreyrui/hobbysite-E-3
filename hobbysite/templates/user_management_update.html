@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Update Profile{% endblock %}
+{% block heading %}
+{% endblock heading %}
+{% block form %}
+{% endblock form %}
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_div }}
+        <button type="submit">Update</button>
+    </form>
+{% endblock content %}

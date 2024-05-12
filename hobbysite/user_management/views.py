@@ -11,7 +11,7 @@ class ProfileUpdateView(UpdateView):
     form_class = UpdateProfileForm
 
     def get_object(self, queryset=None):
-        return self.request.user.profile
+        return self.request.user
 
     def form_valid(self, form):
         profile = form.save(commit=False)

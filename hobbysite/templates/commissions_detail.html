@@ -39,6 +39,9 @@
                 <p>Open Slots for {{ job.role }}: {{job.number_of_accepted_applicants }}</p> 
             </div>
         {% endfor %}
+        {% if commission.author == request.user.profile %}
+            <a href="/commissions/{{commission.pk}}/add-job">Add a Job</a>
+        {% endif %}
     </div>
 
         {% if request.user.is_authenticated %}
