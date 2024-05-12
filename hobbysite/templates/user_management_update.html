@@ -6,9 +6,9 @@
 {% block form %}
 {% endblock form %}
 {% block content %}
-    <form method="POST">
+    <form method="POST"> <!--To update the email information and display name-->
         {% csrf_token %}
         {{ form.as_div }}
-        <button type="submit">Update</button>
+        <button type="submit"> Update</button>
     </form>
 {% endblock content %}
