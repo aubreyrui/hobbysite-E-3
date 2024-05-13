@@ -11,10 +11,10 @@ class ProfileUpdateView(UpdateView):
     form_class = UpdateProfileForm
 
     def get_object(self, queryset=None):
-        return self.request.user
+        return self.request.user.profile
 
     def form_valid(self, form):
-        profile = form.save(commit=False)
+        profile = form.instance
         profile.display_name = form.cleaned_data['display_name'] #manually accessing the values
         profile.email_address = form.cleaned_data['email_address']
         profile.save()

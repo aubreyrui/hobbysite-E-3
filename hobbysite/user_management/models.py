@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.db.models.signals import post_save
 
 
 class Profile(models.Model):
@@ -16,3 +17,11 @@ class Profile(models.Model):
 		self.user.email = self.email_address
 		self.user.save()
 		super(Profile,self).save(*args,**kwargs)
+
+
+# https://stackoverflow.com/questions/11488974/django-create-user-profile-on-user-creation
+def create_user_profile(sender, instance, created, **kwargs): 
+	if created:
+		Profile.objects.create(user=instance, display_name=sender)
+
+post_save.connect(create_user_profile, sender=User)
